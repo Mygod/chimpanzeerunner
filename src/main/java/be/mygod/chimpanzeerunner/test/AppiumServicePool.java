@@ -1,14 +1,18 @@
 package be.mygod.chimpanzeerunner.test;
 
+import be.mygod.chimpanzeerunner.App;
 import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.io.File;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 
 public final class AppiumServicePool {
@@ -16,6 +20,7 @@ public final class AppiumServicePool {
 
     private static boolean closed;
     private static final LinkedList<AppiumDriverLocalService> queue = new LinkedList<>();
+    private static final SimpleDateFormat logFileFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 
     private static Field streamField, streamsField;
 
@@ -35,7 +40,7 @@ public final class AppiumServicePool {
         synchronized (queue) {
             closed = true;
         }
-        for (AppiumDriverLocalService service : queue) service.stop();
+        queue.forEach(AppiumDriverLocalService::stop);
         queue.clear();
     }
     public static AppiumDriverLocalService request() {
@@ -51,9 +56,13 @@ public final class AppiumServicePool {
         capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 120);
         capabilities.setCapability(AndroidMobileCapabilityType.UNICODE_KEYBOARD, true);   // hmm why not?
         capabilities.setCapability(AndroidMobileCapabilityType.RESET_KEYBOARD, true);
-        // Logging perhaps: withLogFile
-        AppiumDriverLocalService service = new AppiumServiceBuilder().usingAnyFreePort()
-                .withCapabilities(capabilities).build();
+        File logFile = new File(App.instance.logDir, String.format("appium-%s.log", logFileFormat.format(new Date())));
+        System.out.printf("Creating new appium service with log file: %s\n", logFile);
+        AppiumDriverLocalService service = new AppiumServiceBuilder()
+                .usingAnyFreePort()
+                .withCapabilities(capabilities)
+                .withLogFile(logFile)
+                .build();
         try {
             ((ArrayList<OutputStream>) streamsField.get(streamField.get(service))).clear(); // remove System.out logging
         } catch (IllegalAccessException e) {
