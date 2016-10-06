@@ -6,6 +6,9 @@ import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.io.OutputStream;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public final class AppiumServicePool {
@@ -13,6 +16,20 @@ public final class AppiumServicePool {
 
     private static boolean closed;
     private static final LinkedList<AppiumDriverLocalService> queue = new LinkedList<>();
+
+    private static Field streamField, streamsField;
+
+    static {
+        try {
+            streamField = AppiumDriverLocalService.class.getDeclaredField("stream");
+            streamField.setAccessible(true);
+            streamsField = Class.forName("io.appium.java_client.service.local.ListOutputStream")
+                    .getDeclaredField("streams");
+            streamsField.setAccessible(true);
+        } catch (ClassNotFoundException | NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void close() {
         synchronized (queue) {
@@ -37,6 +54,11 @@ public final class AppiumServicePool {
         // Logging perhaps: withLogFile
         AppiumDriverLocalService service = new AppiumServiceBuilder().usingAnyFreePort()
                 .withCapabilities(capabilities).build();
+        try {
+            ((ArrayList<OutputStream>) streamsField.get(streamField.get(service))).clear(); // remove System.out logging
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
         service.start();
         return service;
     }
