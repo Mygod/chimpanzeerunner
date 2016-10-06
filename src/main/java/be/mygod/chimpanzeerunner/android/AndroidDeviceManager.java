@@ -5,8 +5,8 @@ import be.mygod.chimpanzeerunner.test.TestManager;
 import be.mygod.chimpanzeerunner.test.TestProfile;
 import com.android.ddmlib.AndroidDebugBridge;
 import com.android.ddmlib.IDevice;
-import be.mygod.chimpanzeerunner.devices.Device;
-import be.mygod.chimpanzeerunner.devices.DeviceManager;
+import be.mygod.chimpanzeerunner.device.Device;
+import be.mygod.chimpanzeerunner.device.DeviceManager;
 
 import java.io.File;
 import java.util.HashSet;

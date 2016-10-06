@@ -1,6 +1,6 @@
 package be.mygod.chimpanzeerunner;
 
-import be.mygod.chimpanzeerunner.devices.DeviceManager;
+import be.mygod.chimpanzeerunner.device.DeviceManager;
 import be.mygod.chimpanzeerunner.test.TestMaster;
 import be.mygod.chimpanzeerunner.test.TestProfile;
 import com.beust.jcommander.JCommander;

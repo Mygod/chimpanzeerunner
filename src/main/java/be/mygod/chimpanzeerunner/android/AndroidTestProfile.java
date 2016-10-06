@@ -1,8 +1,8 @@
 package be.mygod.chimpanzeerunner.android;
 
 import be.mygod.chimpanzeerunner.android.os.BroadcastReceiver;
-import be.mygod.chimpanzeerunner.devices.Device;
-import be.mygod.chimpanzeerunner.devices.DeviceManager;
+import be.mygod.chimpanzeerunner.device.Device;
+import be.mygod.chimpanzeerunner.device.DeviceManager;
 import be.mygod.chimpanzeerunner.test.TestProfile;
 import com.android.ddmlib.IDevice;
 import io.appium.java_client.remote.MobileCapabilityType;

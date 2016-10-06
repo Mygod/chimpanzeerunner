@@ -1,4 +1,4 @@
-package be.mygod.chimpanzeerunner.devices;
+package be.mygod.chimpanzeerunner.device;
 
 import be.mygod.chimpanzeerunner.android.AndroidDeviceManager;
 import be.mygod.chimpanzeerunner.test.TestManager;

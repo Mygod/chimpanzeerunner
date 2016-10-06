@@ -1,10 +1,10 @@
 package be.mygod.chimpanzeerunner.test;
 
-import be.mygod.chimpanzeerunner.devices.DeviceManager;
+import be.mygod.chimpanzeerunner.device.DeviceManager;
 import io.appium.java_client.remote.MobileCapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import be.mygod.chimpanzeerunner.android.AndroidTestProfile;
-import be.mygod.chimpanzeerunner.devices.Device;
+import be.mygod.chimpanzeerunner.device.Device;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;

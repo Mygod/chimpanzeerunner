@@ -1,7 +1,7 @@
 package be.mygod.chimpanzeerunner.test;
 
-import be.mygod.chimpanzeerunner.devices.Device;
-import be.mygod.chimpanzeerunner.devices.DeviceManager;
+import be.mygod.chimpanzeerunner.device.Device;
+import be.mygod.chimpanzeerunner.device.DeviceManager;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

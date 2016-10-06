@@ -1,7 +1,7 @@
 package be.mygod.chimpanzeerunner.android;
 
 import com.android.ddmlib.IDevice;
-import be.mygod.chimpanzeerunner.devices.Device;
+import be.mygod.chimpanzeerunner.device.Device;
 import io.appium.java_client.remote.MobileCapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 

@@ -1,4 +1,4 @@
-package be.mygod.chimpanzeerunner.listeners;
+package be.mygod.chimpanzeerunner.listener;
 
 import io.appium.java_client.events.api.general.JavaScriptEventListener;
 import org.openqa.selenium.WebDriver;

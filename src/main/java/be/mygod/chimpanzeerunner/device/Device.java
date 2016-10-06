@@ -1,4 +1,4 @@
-package be.mygod.chimpanzeerunner.devices;
+package be.mygod.chimpanzeerunner.device;
 
 import org.openqa.selenium.remote.DesiredCapabilities;
 
