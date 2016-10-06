@@ -1,6 +1,7 @@
-package be.mygod.chimpanzeerunner.android;
+package be.mygod.chimpanzeerunner.android.device;
 
 import be.mygod.chimpanzeerunner.App;
+import be.mygod.chimpanzeerunner.android.test.AndroidTestManager;
 import be.mygod.chimpanzeerunner.test.TestManager;
 import be.mygod.chimpanzeerunner.test.TestProfile;
 import com.android.ddmlib.AndroidDebugBridge;

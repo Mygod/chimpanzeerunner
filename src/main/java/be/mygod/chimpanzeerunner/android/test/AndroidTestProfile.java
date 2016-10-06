@@ -1,5 +1,6 @@
-package be.mygod.chimpanzeerunner.android;
+package be.mygod.chimpanzeerunner.android.test;
 
+import be.mygod.chimpanzeerunner.android.device.AndroidDevice;
 import be.mygod.chimpanzeerunner.android.os.BroadcastReceiver;
 import be.mygod.chimpanzeerunner.device.Device;
 import be.mygod.chimpanzeerunner.device.DeviceManager;
@@ -28,6 +29,7 @@ public class AndroidTestProfile extends TestProfile {
         super(file);
         try (ApkParser parser = new ApkParser(appFile)) {
             ApkMeta meta = parser.getApkMeta();
+            packageName = meta.getPackageName();
             name = String.format("%s %s (%d)", meta.getName(), meta.getVersionName(), meta.getVersionCode());
             minSdkVersion = Integer.parseInt(meta.getMinSdkVersion());
             Document manifest = dbf.newDocumentBuilder()
@@ -39,9 +41,11 @@ public class AndroidTestProfile extends TestProfile {
         }
     }
 
-    private String name;
-    private int minSdkVersion;
-    private BroadcastReceiver[] receivers;
+    public final String packageName;
+    public final BroadcastReceiver[] receivers;
+
+    private final String name;
+    private final int minSdkVersion;
 
     @Override
     public DeviceManager getDeviceManager() {

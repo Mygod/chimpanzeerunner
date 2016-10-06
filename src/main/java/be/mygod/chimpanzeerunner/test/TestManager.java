@@ -1,6 +1,8 @@
 package be.mygod.chimpanzeerunner.test;
 
 import be.mygod.chimpanzeerunner.action.AbstractAction;
+import be.mygod.chimpanzeerunner.action.NavigateBack;
+import be.mygod.chimpanzeerunner.action.ui.UiAction;
 import be.mygod.chimpanzeerunner.device.Device;
 import be.mygod.chimpanzeerunner.listener.AppiumListener;
 import io.appium.java_client.AppiumDriver;
@@ -30,6 +32,13 @@ public abstract class TestManager implements Runnable {
     public abstract String getLocation();
     public abstract void navigateBack();
 
+    protected Stream<AbstractAction> getActions() {
+        return Stream.concat(
+                UiAction.getActions(this),
+                NavigateBack.getActions(this)
+        );
+    }
+
     @Override
     public final void run() {
         AppiumDriverLocalService service = AppiumServicePool.request();
@@ -39,7 +48,7 @@ public abstract class TestManager implements Runnable {
         device.configureCapabilities(capabilities);
         driver = EventFiringWebDriverFactory.getEventFiringWebDriver(createDriver(service, capabilities),
                 AppiumListener.getListeners(this));
-        Stream<AbstractAction> actions = AbstractAction.getActions(this);
+        Stream<AbstractAction> actions = getActions().distinct();
         actions.forEach(action -> System.out.printf("%s\n", action));
         driver.quit();
         AppiumServicePool.offer(service);

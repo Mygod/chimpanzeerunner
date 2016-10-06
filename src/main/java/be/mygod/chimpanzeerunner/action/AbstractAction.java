@@ -1,19 +1,20 @@
 package be.mygod.chimpanzeerunner.action;
 
-import be.mygod.chimpanzeerunner.action.ui.UiAction;
-import be.mygod.chimpanzeerunner.test.TestManager;
-
-import java.util.stream.Stream;
-
 public abstract class AbstractAction {
-    public static Stream<AbstractAction> getActions(TestManager manager) {
-        return Stream.concat(
-                UiAction.getActions(manager),
-                NavigateBack.getActions(manager)
-        );
+    public abstract void perform();
+
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
     }
 
-    public abstract void perform();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AbstractAction)) return false;
+        AbstractAction that = (AbstractAction) o;
+        return toString().equals(that.toString());
+    }
 
     @Override
     public String toString() {

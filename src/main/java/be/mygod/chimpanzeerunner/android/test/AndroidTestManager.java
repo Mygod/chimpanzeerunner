@@ -1,13 +1,18 @@
-package be.mygod.chimpanzeerunner.android;
+package be.mygod.chimpanzeerunner.android.test;
 
+import be.mygod.chimpanzeerunner.action.AbstractAction;
+import be.mygod.chimpanzeerunner.android.action.AndroidAction;
+import be.mygod.chimpanzeerunner.android.device.AndroidDevice;
+import be.mygod.chimpanzeerunner.device.Device;
+import be.mygod.chimpanzeerunner.test.TestManager;
+import be.mygod.chimpanzeerunner.test.TestProfile;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
-import be.mygod.chimpanzeerunner.device.Device;
-import be.mygod.chimpanzeerunner.test.TestManager;
-import be.mygod.chimpanzeerunner.test.TestProfile;
 import org.openqa.selenium.remote.DesiredCapabilities;
+
+import java.util.stream.Stream;
 
 public class AndroidTestManager extends TestManager {
     public AndroidTestManager(TestProfile profile, Device device) {
@@ -30,5 +35,13 @@ public class AndroidTestManager extends TestManager {
     @Override
     public void navigateBack() {
         driver.pressKeyCode(4); // android.view.KeyEvent.KEYCODE_BACK
+    }
+
+    @Override
+    protected Stream<AbstractAction> getActions() {
+        return Stream.concat(
+                super.getActions(),
+                AndroidAction.getActionsFromReceivers((AndroidDevice) device, (AndroidTestProfile) this.profile)
+        );
     }
 }

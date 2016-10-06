@@ -1,6 +1,6 @@
 package be.mygod.chimpanzeerunner.device;
 
-import be.mygod.chimpanzeerunner.android.AndroidDeviceManager;
+import be.mygod.chimpanzeerunner.android.device.AndroidDeviceManager;
 import be.mygod.chimpanzeerunner.test.TestManager;
 import be.mygod.chimpanzeerunner.test.TestProfile;
 

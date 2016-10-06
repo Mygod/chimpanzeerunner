@@ -30,7 +30,8 @@ public class App {
             jcommander.usage();
             return;
         }
-        if (!(instance.logDirectory = new File(instance.logDir)).mkdirs()) {
+        instance.logDirectory = new File(instance.logDir);
+        if (!instance.logDirectory.isDirectory() && !instance.logDirectory.mkdirs()) {
             System.err.printf("Failed to create log directory. Exiting...\n");
             return;
         }

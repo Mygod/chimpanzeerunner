@@ -1,13 +1,33 @@
 package be.mygod.chimpanzeerunner.android.os;
 
+import be.mygod.chimpanzeerunner.android.action.AndroidAction;
+import be.mygod.chimpanzeerunner.android.action.BroadcastIntent;
+import be.mygod.chimpanzeerunner.android.action.PlacePhoneCall;
+import be.mygod.chimpanzeerunner.android.action.SendSms;
+import be.mygod.chimpanzeerunner.device.Device;
 import org.springframework.util.xml.DomUtils;
 import org.w3c.dom.Element;
 
 import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class BroadcastFilter {
+    private static final HashSet<String>
+            SCHEMES_DEFAULT = new HashSet<>(),
+            SCHEMES_NULL = new HashSet<>(),
+            SCHEMES_EMPTY = new HashSet<>();
+    static {
+        SCHEMES_DEFAULT.add("");
+        SCHEMES_DEFAULT.add("content");
+        SCHEMES_DEFAULT.add("file");
+        SCHEMES_NULL.add(null);
+        SCHEMES_EMPTY.add("");
+    }
+
     public HashSet<String>
             actions = new HashSet<>(),
             categories = new HashSet<>(),
@@ -36,10 +56,10 @@ public class BroadcastFilter {
     public BroadcastFilter(Element element) {
         for (Element child : DomUtils.getChildElements(element)) switch (child.getNodeName()) {
             case "action":
-                actions.add(child.getAttribute("android:name"));
+                actions.add(child.getAttribute("android:componentName"));
                 break;
             case "category":
-                categories.add(child.getAttribute("android:name"));
+                categories.add(child.getAttribute("android:componentName"));
                 break;
             case "data":
                 String val = child.getAttribute("android:scheme");
@@ -113,6 +133,91 @@ public class BroadcastFilter {
             return true;
         }
         return false;
+    }
+
+    public Stream<AndroidAction> getActions(Device device, String packageName, String componentName) {
+        HashSet<String> schemes = this.schemes, datas, types;
+        if (this.types.isEmpty() && schemes.isEmpty()) datas = types = SCHEMES_NULL; else {
+            if (schemes.isEmpty()) schemes = SCHEMES_DEFAULT;
+            datas = new HashSet<>();
+            for (PatternMatcher ssp : this.ssps) for (String scheme : schemes)
+                datas.add(scheme.isEmpty() ? getMatchingString(ssp) : scheme + ':' + getMatchingString(ssp));
+            if (!authorities.isEmpty()) {
+                Set<String> paths = this.paths.isEmpty() ? SCHEMES_EMPTY
+                        : this.paths.stream().map(BroadcastFilter::getMatchingString).collect(Collectors.toSet());
+                for (String scheme : schemes) if (!scheme.isEmpty())
+                    for (AuthorityEntry authority : authorities) for (String path : paths) {
+                        StringBuilder url = new StringBuilder(scheme);
+                        url.append("://");
+                        url.append(authority.host);
+                        if (authority.port >= 0) {
+                            url.append(':');
+                            url.append(authority.port);
+                        }
+                        url.append(path);
+                        datas.add(url.toString());
+                    }
+            }
+            types = this.types.isEmpty() ? SCHEMES_NULL : this.types;
+        }
+        return actions.stream().flatMap(action -> {
+            switch (action) {
+                case "android.appwidget.action.APPWIDGET_UPDATE":
+                case "android.media.AUDIO_BECOMING_NOISY":
+                case "android.intent.action.BATTERY_CHANGED":
+                case "android.intent.action.BATTERY_LOW":
+                case "android.intent.action.BATTERY_OKAY":
+                case "android.intent.action.BOOT_COMPLETED":
+                case "android.net.conn.CONNECTIVITY_CHANGE":
+                case "android.intent.action.DATE_CHANGED":
+                case "android.intent.action.INPUT_METHOD_CHANGED":
+                case "android.intent.action.MEDIA_EJECT":
+                case "android.intent.action.MEDIA_MOUNTED":
+                case "android.intent.action.MEDIA_SCANNER_FINISHED":
+                case "android.intent.action.MEDIA_UNMOUNTED":
+                case "android.intent.action.NEW_OUTGOING_CALL":
+                case "android.intent.action.PACKAGE_ADDED":
+                case "android.intent.action.PACKAGE_REMOVED":
+                case "android.intent.action.PACKAGE_REPLACED":
+                case "android.intent.action.ACTION_POWER_CONNECTED":    // todo: replace these with other better adb commands
+                case "android.intent.action.ACTION_POWER_DISCONNECTED":
+                case "android.intent.action.ACTION_SHUTDOWN":
+                case "android.intent.action.TIME_SET":
+                case "android.intent.action.TIMEZONE_CHANGED":
+                case "android.intent.action.UMS_CONNECTED":
+                case "android.intent.action.UMS_DISCONNECTED":
+                case "android.intent.action.USER_PRESENT":
+                    return datas.stream().flatMap(data -> types.stream().map(type ->
+                            new BroadcastIntent(device, packageName, componentName, action, data, type, categories)));
+                // TODO: what about the rest of the data in intent?
+                case "android.intent.action.PHONE_STATE": return Stream.of(new PlacePhoneCall(device));
+                case "android.provider.Telephony.SMS_RECEIVED": return Stream.of(new SendSms(device));
+                default: return null;
+            }
+        }).filter(intent -> intent != null);
+    }
+
+    private static String getMatchingString(PatternMatcher matcher) {
+        if (matcher.type == 2) {
+            // PatternMatcher supports [.*\]. So what we need to do is to ignore '.'s, throw away '*'s and unescape '\'s
+            StringBuilder builder = new StringBuilder();
+            boolean escaped = false;
+            for (char c : matcher.path.toCharArray())
+                if (escaped) {
+                    builder.append(c);
+                    escaped = false;
+                } else switch (c) {
+                    case '*':
+                        break;
+                    case '\\':
+                        escaped = true;
+                        break;
+                    default:
+                        builder.append(c);
+                        break;
+                }
+            return builder.toString();
+        } else return matcher.path;
     }
 
     @Override
