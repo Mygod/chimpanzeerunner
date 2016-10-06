@@ -6,7 +6,7 @@ import io.appium.java_client.remote.MobileCapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class AndroidDevice extends Device {
-    private IDevice device;
+    public IDevice device;
 
     public AndroidDevice(IDevice device) {
         this.device = device;

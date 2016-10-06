@@ -3,6 +3,7 @@ package be.mygod.chimpanzeerunner.android;
 import be.mygod.chimpanzeerunner.devices.Device;
 import be.mygod.chimpanzeerunner.devices.DeviceManager;
 import be.mygod.chimpanzeerunner.test.TestProfile;
+import com.android.ddmlib.IDevice;
 import io.appium.java_client.remote.MobileCapabilityType;
 import net.dongliu.apk.parser.ApkParser;
 import net.dongliu.apk.parser.bean.ApkMeta;
@@ -18,6 +19,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 
 public class AndroidTestProfile extends TestProfile {
     private static final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -27,6 +29,7 @@ public class AndroidTestProfile extends TestProfile {
         try (ApkParser parser = new ApkParser(appFile)) {
             ApkMeta meta = parser.getApkMeta();
             name = String.format("%s %s (%d)", meta.getName(), meta.getVersionName(), meta.getVersionCode());
+            minSdkVersion = Integer.parseInt(meta.getMinSdkVersion());
             Document manifest = dbf.newDocumentBuilder()
                     .parse(new InputSource(new StringReader(parser.getManifestXml())));
             Element application = DomUtils.getChildElementByTagName(manifest.getDocumentElement(), "application");
@@ -45,6 +48,7 @@ public class AndroidTestProfile extends TestProfile {
     }
 
     private String name;
+    private int minSdkVersion;
 
     @Override
     public DeviceManager getDeviceManager() {
@@ -53,8 +57,9 @@ public class AndroidTestProfile extends TestProfile {
 
     @Override
     public boolean isAcceptableDevice(Device device) {
-        // TODO: add more
-        return device instanceof AndroidDevice;
+        if (!(device instanceof AndroidDevice)) return false;
+        IDevice dev = ((AndroidDevice) device).device;
+        return dev.isOnline() && dev.getApiLevel() >= minSdkVersion;
     }
 
     @Override

@@ -30,7 +30,6 @@ public class AndroidDeviceManager extends DeviceManager {
         this.adbFile = adbFile;
         AndroidDebugBridge.init(false);
         adbBridge = AndroidDebugBridge.createBridge(adbFile.getAbsolutePath(), false);
-        // TODO: manual wait needed?
         //New Changes
         //AndroidDebugBridge.addClientChangeListener(new ClientChangeListener());
         /*try{
