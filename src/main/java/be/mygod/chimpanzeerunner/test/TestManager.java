@@ -42,6 +42,6 @@ public abstract class TestManager implements Runnable {
         Stream<AbstractAction> actions = AbstractAction.getActions(this);
         actions.forEach(action -> System.out.printf("%s\n", action));
         driver.quit();
-        service.stop();
+        AppiumServicePool.offer(service);
     }
 }
