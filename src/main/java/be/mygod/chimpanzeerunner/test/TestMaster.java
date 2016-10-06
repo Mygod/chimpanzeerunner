@@ -18,6 +18,7 @@ public final class TestMaster implements Runnable {
     @Override
     public void run() {
         try {
+            System.out.print("Waiting for devices...\n");
             while (!profiles.isEmpty()) {
                 profiles.removeIf(profile -> {
                     DeviceManager dm = profile.getDeviceManager();

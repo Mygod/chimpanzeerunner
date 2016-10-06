@@ -1,4 +1,4 @@
-package be.mygod.chimpanzeerunner.android;
+package be.mygod.chimpanzeerunner.android.os;
 
 import org.springframework.util.xml.DomUtils;
 import org.w3c.dom.Element;

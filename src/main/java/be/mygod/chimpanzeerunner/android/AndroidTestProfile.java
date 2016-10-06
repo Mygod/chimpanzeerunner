@@ -1,5 +1,6 @@
 package be.mygod.chimpanzeerunner.android;
 
+import be.mygod.chimpanzeerunner.android.os.BroadcastReceiver;
 import be.mygod.chimpanzeerunner.devices.Device;
 import be.mygod.chimpanzeerunner.devices.DeviceManager;
 import be.mygod.chimpanzeerunner.test.TestProfile;
@@ -19,7 +20,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
 
 public class AndroidTestProfile extends TestProfile {
     private static final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -33,22 +33,15 @@ public class AndroidTestProfile extends TestProfile {
             Document manifest = dbf.newDocumentBuilder()
                     .parse(new InputSource(new StringReader(parser.getManifestXml())));
             Element application = DomUtils.getChildElementByTagName(manifest.getDocumentElement(), "application");
-            for (Element element : DomUtils.getChildElements(application)) switch (element.getNodeName()) {
-//                case "activity":
-//                    if (DomUtils.getChildElementsByTagName(element, "intent-filter").stream().map(BroadcastFilter::new)
-//                            .anyMatch(filter -> filter.actions.contains("android.intent.action.MAIN") &&
-//                                    filter.categories.contains("android.intent.category.LAUNCHER")))
-//                        mainActivityName = element.getAttribute("android:name");
-//                    break;
-                case "receiver":
-                    // TODO: add receiver list
-                    break;
-            }
+            receivers = DomUtils.getChildElements(application).stream()
+                    .filter(element -> "receiver".equals(element.getNodeName()))
+                    .map(BroadcastReceiver::new).toArray(BroadcastReceiver[]::new);
         }
     }
 
     private String name;
     private int minSdkVersion;
+    private BroadcastReceiver[] receivers;
 
     @Override
     public DeviceManager getDeviceManager() {

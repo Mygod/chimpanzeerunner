@@ -1,4 +1,4 @@
-package be.mygod.chimpanzeerunner.android;
+package be.mygod.chimpanzeerunner.android.os;
 
 import java.util.regex.Matcher;
 
