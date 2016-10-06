@@ -9,7 +9,7 @@ import com.beust.jcommander.Parameter;
 import java.io.File;
 import java.util.List;
 
-public class App {
+public final class App {
     @Parameter(names = {"--android-home"}, description = "Android SDK path, default: $ANDROID_HOME")
     public String androidHome = System.getenv("ANDROID_HOME");
 

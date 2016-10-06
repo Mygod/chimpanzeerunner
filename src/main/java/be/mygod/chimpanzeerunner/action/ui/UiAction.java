@@ -13,7 +13,7 @@ import java.util.stream.Stream;
  * https://github.com/appium/appium-android-bootstrap/blob/e20f5a8/bootstrap/src/io/appium/android/bootstrap/AndroidElement.java
  *
  * Other stuff that may be used in the future:
- *   element.getAttribute("componentName") = contentDescription || text
+ *   element.getAttribute("name") = contentDescription || text
  *   element.getAttribute("resourceId")
  *
  * @author Mygod

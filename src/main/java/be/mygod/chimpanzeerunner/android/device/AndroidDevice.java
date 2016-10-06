@@ -33,6 +33,7 @@ public class AndroidDevice extends Device {
 
     public void executeDeviceCommand(String command) throws IOException {
         String name = device.toString();
+        // TODO: This only works on emulators
         try (Socket socket = new Socket("127.0.0.1", Integer.parseInt(name.substring(name.indexOf('-') + 1)))) {
             try (OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream())) {
                 writer.write(command);
