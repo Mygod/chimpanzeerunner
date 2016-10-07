@@ -163,7 +163,7 @@ public class BroadcastFilter {
         return actions.stream().flatMap(action -> {
             switch (action) {
                 case "android.appwidget.action.APPWIDGET_UPDATE":
-                case "android.media.AUDIO_BECOMING_NOISY":
+                //case "android.media.AUDIO_BECOMING_NOISY":  // todo: permission denied
                 case "android.intent.action.BATTERY_CHANGED":
                 case "android.intent.action.BATTERY_LOW":
                 case "android.intent.action.BATTERY_OKAY":
