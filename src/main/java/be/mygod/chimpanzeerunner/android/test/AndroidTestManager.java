@@ -2,6 +2,7 @@ package be.mygod.chimpanzeerunner.android.test;
 
 import be.mygod.chimpanzeerunner.action.AbstractAction;
 import be.mygod.chimpanzeerunner.android.action.AndroidAction;
+import be.mygod.chimpanzeerunner.android.action.PressMediaButton;
 import be.mygod.chimpanzeerunner.android.device.AndroidDevice;
 import be.mygod.chimpanzeerunner.device.Device;
 import be.mygod.chimpanzeerunner.test.TestManager;
@@ -44,7 +45,8 @@ public class AndroidTestManager extends TestManager {
         return Stream.of(
                 super.getActions(),
                 AndroidAction.getActionsFromReceivers(device, profile),
-                AndroidAction.getActionsFromAudioFocus(device, profile)
+                AndroidAction.getActionsFromAudioFocus(device, profile),
+                PressMediaButton.getActions(device, profile)
         ).flatMap(x -> x);
     }
 }
