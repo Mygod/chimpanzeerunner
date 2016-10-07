@@ -5,6 +5,7 @@ import be.mygod.chimpanzeerunner.android.action.AndroidAction;
 import be.mygod.chimpanzeerunner.android.action.PressMediaButton;
 import be.mygod.chimpanzeerunner.android.device.AndroidDevice;
 import be.mygod.chimpanzeerunner.device.Device;
+import be.mygod.chimpanzeerunner.strategy.AbstractStrategy;
 import be.mygod.chimpanzeerunner.test.TestManager;
 import be.mygod.chimpanzeerunner.test.TestProfile;
 import io.appium.java_client.AppiumDriver;
@@ -13,11 +14,13 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class AndroidTestManager extends TestManager {
-    public AndroidTestManager(TestProfile profile, Device device) {
-        super(profile, device);
+    public AndroidTestManager(TestProfile profile, Device device,
+                              Function<TestManager, AbstractStrategy> strategy) {
+        super(profile, device, strategy);
     }
     private AndroidDriver<MobileElement> driver;
 

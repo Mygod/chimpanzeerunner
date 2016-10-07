@@ -1,6 +1,7 @@
 package be.mygod.chimpanzeerunner.device;
 
 import be.mygod.chimpanzeerunner.android.device.AndroidDeviceManager;
+import be.mygod.chimpanzeerunner.strategy.AbstractStrategy;
 import be.mygod.chimpanzeerunner.test.TestManager;
 import be.mygod.chimpanzeerunner.test.TestProfile;
 
@@ -30,5 +31,6 @@ public abstract class DeviceManager {
     public abstract Device tryGetFreeDevice(Function<Device, Boolean> filter);
     public abstract boolean releaseDevice(Device device);
 
-    public abstract TestManager startTest(TestProfile profile, Device device);
+    public abstract TestManager startTest(TestProfile profile, Device device,
+                                          Function<TestManager, AbstractStrategy> strategy);
 }
