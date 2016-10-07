@@ -27,7 +27,7 @@ public class RandomSelectionStrategy extends CountingStrategy {
         ActionSelector selector = new ActionSelector();
         actions.forEach(selector::supply);
         System.out.printf("Performing action #%d: %s\n", count, selector.action);
-        selector.action.perform();
+        if (selector.action != null) selector.action.perform();
     }
 
     @Override

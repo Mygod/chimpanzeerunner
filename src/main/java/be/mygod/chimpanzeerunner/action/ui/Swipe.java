@@ -1,7 +1,11 @@
 package be.mygod.chimpanzeerunner.action.ui;
 
+import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.SwipeElementDirection;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
+import org.openqa.selenium.Rectangle;
 
 import java.util.Random;
 
@@ -14,9 +18,15 @@ public class Swipe extends UiAction {
 
     @Override
     public boolean perform() {
-        element.swipe(random.nextBoolean() ? SwipeElementDirection.DOWN : SwipeElementDirection.UP,
-                random.nextInt(1000) + 1);
-        element.swipe(random.nextBoolean() ? SwipeElementDirection.LEFT : SwipeElementDirection.RIGHT,
+//        Rectangle rect = element.getRect();
+//        int x = rect.getWidth() >> 1, y = rect.getHeight() >> 1, centerX = rect.getX() + x, centerY = rect.getY() + y;
+        Point center = element.getCenter();
+        Dimension size = element.getSize();
+        int x = size.getWidth() >> 1, y = size.getHeight() >> 1, centerX = center.getX(), centerY = center.getY();
+        if (x == 0 || y == 0) return false;
+        if (random.nextBoolean()) x = -x;
+        if (random.nextBoolean()) y = -y;
+        ((AppiumDriver) element.getWrappedDriver()).swipe(centerX, centerY, centerX + x, centerX + y,
                 random.nextInt(1000) + 1);
         return true;
     }

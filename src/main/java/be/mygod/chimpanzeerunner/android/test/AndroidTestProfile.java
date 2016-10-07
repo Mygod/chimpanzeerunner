@@ -56,7 +56,12 @@ public class AndroidTestProfile extends TestProfile {
     public boolean isAcceptableDevice(Device device) {
         if (!(device instanceof AndroidDevice)) return false;
         IDevice dev = ((AndroidDevice) device).device;
-        return dev.isOnline() && dev.getApiLevel() >= minSdkVersion;
+        try {
+            return dev.isOnline() && dev.getApiLevel() >= minSdkVersion;
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
