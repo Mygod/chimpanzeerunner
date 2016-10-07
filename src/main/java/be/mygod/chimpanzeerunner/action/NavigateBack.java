@@ -21,7 +21,8 @@ public class NavigateBack extends AbstractAction {
     private TestManager manager;
 
     @Override
-    public void perform() {
+    public boolean perform() {
         manager.navigateBack();
+        return true;
     }
 }

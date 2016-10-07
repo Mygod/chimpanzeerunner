@@ -1,7 +1,7 @@
 package be.mygod.chimpanzeerunner.action;
 
 public abstract class AbstractAction {
-    public abstract void perform();
+    public abstract boolean perform();
 
     @Override
     public int hashCode() {

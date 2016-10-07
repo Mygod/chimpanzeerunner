@@ -10,13 +10,15 @@ public class PlacePhoneCall extends AndroidAction {
     }
 
     @Override
-    public void perform() {
+    public boolean perform() {
         try {
             targetDevice.executeDeviceCommand("gsm call 6789077112");
             Thread.sleep(6000);
             targetDevice.executeDeviceCommand("gsm cancel 6789077112");
+            return true;
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+        return false;
     }
 }

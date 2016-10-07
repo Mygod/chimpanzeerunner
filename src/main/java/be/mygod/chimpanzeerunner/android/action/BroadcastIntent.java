@@ -26,7 +26,7 @@ public class BroadcastIntent extends AndroidAction {
     }
 
     @Override
-    public void perform() {
+    public boolean perform() {
         // TODO: --user uid?
         StringBuilder command = new StringBuilder("am broadcast -a ");
         command.append(action);
@@ -54,12 +54,13 @@ public class BroadcastIntent extends AndroidAction {
         }
         try {
             String result = targetDevice.executeShellCommand(command.toString());
-            if (!result.contains("Broadcast completed"))
-                System.err.printf("Unknown error when broadcasting:\n%s\n", result);
+            if (result.contains("Broadcast completed")) return true;
+            System.err.printf("Unknown error when broadcasting:\n%s\n", result);
         } catch (TimeoutException | AdbCommandRejectedException | ShellCommandUnresponsiveException | IOException e) {
             System.err.printf("Broadcast failed.\n");
             e.printStackTrace();
         }
+        return false;
     }
 
     @Override

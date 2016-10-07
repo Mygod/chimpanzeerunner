@@ -8,7 +8,8 @@ public class LongClick extends UiAction {
     }
 
     @Override
-    public void perform() {
+    public boolean perform() {
         element.tap(1, 500);
+        return true;
     }
 }

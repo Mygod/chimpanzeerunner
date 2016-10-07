@@ -8,7 +8,8 @@ public class Click extends UiAction {
     }
 
     @Override
-    public void perform() {
+    public boolean perform() {
         element.click();
+        return true;
     }
 }

@@ -10,11 +10,13 @@ public class SendSms extends AndroidAction {
     }
 
     @Override
-    public void perform() {
+    public boolean perform() {
         try {
             targetDevice.executeDeviceCommand("sms send 6789077112 Come over! Let's have a coffee.");
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return false;
     }
 }

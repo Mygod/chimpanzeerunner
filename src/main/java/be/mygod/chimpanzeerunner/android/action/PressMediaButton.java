@@ -25,12 +25,14 @@ public class PressMediaButton extends AndroidAction {
     }
 
     @Override
-    public void perform() {
+    public boolean perform() {
         try {
             targetDevice.executeShellCommand("input keyevent " + MEDIA_BUTTONS[random.nextInt(MEDIA_BUTTONS.length)]);
+            return true;
         } catch (TimeoutException | AdbCommandRejectedException | IOException | ShellCommandUnresponsiveException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     public static Stream<PressMediaButton> getActions(AndroidDevice device, AndroidTestProfile profile) {

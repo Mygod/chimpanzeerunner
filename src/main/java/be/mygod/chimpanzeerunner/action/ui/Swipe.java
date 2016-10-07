@@ -13,10 +13,11 @@ public class Swipe extends UiAction {
     private static final Random random = new Random();
 
     @Override
-    public void perform() {
+    public boolean perform() {
         element.swipe(random.nextBoolean() ? SwipeElementDirection.DOWN : SwipeElementDirection.UP,
                 random.nextInt(1000) + 1);
         element.swipe(random.nextBoolean() ? SwipeElementDirection.LEFT : SwipeElementDirection.RIGHT,
                 random.nextInt(1000) + 1);
+        return true;
     }
 }
