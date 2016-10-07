@@ -7,6 +7,7 @@ import be.mygod.chimpanzeerunner.android.device.AndroidDevice;
 import be.mygod.chimpanzeerunner.device.Device;
 import be.mygod.chimpanzeerunner.strategy.AbstractStrategy;
 import be.mygod.chimpanzeerunner.test.TestManager;
+import be.mygod.chimpanzeerunner.test.TestMaster;
 import be.mygod.chimpanzeerunner.test.TestProfile;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
@@ -18,9 +19,9 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class AndroidTestManager extends TestManager {
-    public AndroidTestManager(TestProfile profile, Device device,
+    public AndroidTestManager(TestMaster master, TestProfile profile, Device device,
                               Function<TestManager, AbstractStrategy> strategy) {
-        super(profile, device, strategy);
+        super(master, profile, device, strategy);
     }
     private AndroidDriver<MobileElement> driver;
 

@@ -4,6 +4,7 @@ import be.mygod.chimpanzeerunner.App;
 import be.mygod.chimpanzeerunner.android.test.AndroidTestManager;
 import be.mygod.chimpanzeerunner.strategy.AbstractStrategy;
 import be.mygod.chimpanzeerunner.test.TestManager;
+import be.mygod.chimpanzeerunner.test.TestMaster;
 import be.mygod.chimpanzeerunner.test.TestProfile;
 import com.android.ddmlib.AndroidDebugBridge;
 import com.android.ddmlib.IDevice;
@@ -70,8 +71,8 @@ public class AndroidDeviceManager extends DeviceManager {
     }
 
     @Override
-    public TestManager startTest(TestProfile profile, Device device,
+    public TestManager startTest(TestMaster master, TestProfile profile, Device device,
                                  Function<TestManager, AbstractStrategy> strategy) {
-        return new AndroidTestManager(profile, device, strategy);
+        return new AndroidTestManager(master, profile, device, strategy);
     }
 }

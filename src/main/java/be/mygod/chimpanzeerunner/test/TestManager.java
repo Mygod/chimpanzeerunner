@@ -16,12 +16,15 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 public abstract class TestManager implements Runnable {
+    private final TestMaster master;
     protected final TestProfile profile;
     protected final Device device;
     private final Function<TestManager, AbstractStrategy> strategyFactory;
     private AppiumDriver<MobileElement> driver;
 
-    public TestManager(TestProfile profile, Device device, Function<TestManager, AbstractStrategy> strategy) {
+    public TestManager(TestMaster master, TestProfile profile, Device device,
+                       Function<TestManager, AbstractStrategy> strategy) {
+        this.master = master;
         this.profile = profile;
         this.device = device;
         strategyFactory = strategy;
@@ -45,7 +48,7 @@ public abstract class TestManager implements Runnable {
 
     @Override
     public final void run() {
-        AppiumDriverLocalService service = AppiumServicePool.request();
+        AppiumDriverLocalService service = master.request();
         System.out.printf("Testing profile %s on device %s with service %s...\n", profile, device, service.getUrl());
         DesiredCapabilities capabilities = new DesiredCapabilities();
         profile.configureCapabilities(capabilities);
@@ -55,6 +58,6 @@ public abstract class TestManager implements Runnable {
         AbstractStrategy strategy = strategyFactory.apply(this);
         while (strategy.perform(getActions().distinct())) { }
         driver.quit();
-        AppiumServicePool.offer(service);
+        master.offer(service);
     }
 }
