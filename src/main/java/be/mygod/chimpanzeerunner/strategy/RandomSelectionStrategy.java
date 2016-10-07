@@ -26,6 +26,12 @@ public class RandomSelectionStrategy extends CountingStrategy {
     public void performCore(Stream<AbstractAction> actions) {
         ActionSelector selector = new ActionSelector();
         actions.forEach(selector::supply);
+        System.out.printf("Performing action #%d: %s\n", count, selector.action);
         selector.action.perform();
+    }
+
+    @Override
+    public String toString() {
+        return "Random Selection Strategy";
     }
 }

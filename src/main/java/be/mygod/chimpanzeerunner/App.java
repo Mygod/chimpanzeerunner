@@ -3,6 +3,8 @@ package be.mygod.chimpanzeerunner;
 import be.mygod.chimpanzeerunner.device.Device;
 import be.mygod.chimpanzeerunner.device.DeviceManager;
 import be.mygod.chimpanzeerunner.strategy.AbstractStrategy;
+import be.mygod.chimpanzeerunner.strategy.InvalidStrategy;
+import be.mygod.chimpanzeerunner.strategy.RandomSelectionStrategy;
 import be.mygod.chimpanzeerunner.strategy.StrategyParser;
 import be.mygod.chimpanzeerunner.test.AppiumServicePool;
 import be.mygod.chimpanzeerunner.test.TestManager;
@@ -18,16 +20,18 @@ import java.util.List;
 import java.util.function.Function;
 
 public final class App {
-    @Parameter(names = {"-s", "--strategy"}, description = "Strategy to use. Default: random", converter = StrategyParser.class)
-    public Function<TestManager, AbstractStrategy> strategy;
+    @Parameter(names = {"-s", "--strategy"}, description = "Strategy to use.                                                      " +
+            "Default: random", converter = StrategyParser.class)
+    public Function<TestManager, AbstractStrategy> strategy = RandomSelectionStrategy::new;
 
-    @Parameter(names = {"-c", "--count"}, description = "Specify total count of actions to taken. Only apply to the following strategies: random. Default: 100")
+    @Parameter(names = {"-c", "--count"}, description = "Specify total count of actions to taken.                                 " +
+            "Only apply to the following strategies: random")
     public int actionsCount = 100;
 
-    @Parameter(names = {"--android-home"}, description = "Android SDK path, default: $ANDROID_HOME")
-    public String androidHome = System.getenv("ANDROID_HOME");
+    @Parameter(names = {"--android-home"}, description = "Android SDK path, overrides $ANDROID_HOME.")
+    public String androidHome;
 
-    @Parameter(names = {"--log"}, description = "Directory of log files, default: log")
+    @Parameter(names = {"--log"}, description = "Directory of log files.")
     public String logDir = "log";
     public File logDirectory;
 
@@ -40,14 +44,16 @@ public final class App {
     public static App instance = new App();
     public static void main(String[] args) {
         JCommander jcommander = new JCommander(instance, args);
-        if (instance.help || instance.paths == null || instance.paths.isEmpty() || instance.strategy == null) {
+        if (instance.help || instance.paths == null || instance.paths.isEmpty() ||
+                instance.strategy.apply(null) instanceof InvalidStrategy) {
             jcommander.usage();
             return;
         }
         instance.run();
     }
 
-    public void run() {
+    private void run() {
+        if (androidHome == null) androidHome = System.getenv("ANDROID_HOME");
         logDirectory = new File(logDir);
         if (!logDirectory.isDirectory() && !logDirectory.mkdirs()) {
             System.err.printf("Failed to create log directory. Exiting...\n");

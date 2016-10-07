@@ -16,7 +16,7 @@ public abstract class CountingStrategy extends AbstractStrategy {
         super(manager);
     }
 
-    private int count = 0;
+    protected int count = 0;
 
     protected abstract void performCore(Stream<AbstractAction> actions);
     @Override

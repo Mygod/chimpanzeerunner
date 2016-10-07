@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 public abstract class TestManager implements Runnable {
     protected final TestProfile profile;
     protected final Device device;
-    protected final Function<TestManager, AbstractStrategy> strategyFactory;
+    private final Function<TestManager, AbstractStrategy> strategyFactory;
     private AppiumDriver<MobileElement> driver;
 
     public TestManager(TestProfile profile, Device device, Function<TestManager, AbstractStrategy> strategy) {
@@ -53,8 +53,11 @@ public abstract class TestManager implements Runnable {
         driver = EventFiringWebDriverFactory.getEventFiringWebDriver(createDriver(service, capabilities),
                 AppiumListener.getListeners(this));
         AbstractStrategy strategy = strategyFactory.apply(this);
-        Stream<AbstractAction> actions = getActions().distinct();
-        actions.forEach(action -> System.out.printf("%s\n", action));
+        try {
+            while (strategy.perform(getActions().distinct())) Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         driver.quit();
         AppiumServicePool.offer(service);
     }
