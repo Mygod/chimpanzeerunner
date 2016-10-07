@@ -53,11 +53,7 @@ public abstract class TestManager implements Runnable {
         driver = EventFiringWebDriverFactory.getEventFiringWebDriver(createDriver(service, capabilities),
                 AppiumListener.getListeners(this));
         AbstractStrategy strategy = strategyFactory.apply(this);
-        try {
-            while (strategy.perform(getActions().distinct())) Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        while (strategy.perform(getActions().distinct())) { }
         driver.quit();
         AppiumServicePool.offer(service);
     }
