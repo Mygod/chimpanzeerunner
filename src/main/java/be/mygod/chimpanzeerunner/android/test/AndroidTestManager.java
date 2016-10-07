@@ -39,9 +39,12 @@ public class AndroidTestManager extends TestManager {
 
     @Override
     protected Stream<AbstractAction> getActions() {
-        return Stream.concat(
+        AndroidDevice device = (AndroidDevice) this.device;
+        AndroidTestProfile profile = (AndroidTestProfile) this.profile;
+        return Stream.of(
                 super.getActions(),
-                AndroidAction.getActionsFromReceivers((AndroidDevice) device, (AndroidTestProfile) this.profile)
-        );
+                AndroidAction.getActionsFromReceivers(device, profile),
+                AndroidAction.getActionsFromAudioFocus(device, profile)
+        ).flatMap(x -> x);
     }
 }

@@ -10,9 +10,7 @@ import com.android.ddmlib.ShellCommandUnresponsiveException;
 import com.android.ddmlib.TimeoutException;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -25,7 +23,9 @@ public abstract class AndroidAction extends AbstractAction {
     }
 
     private static final Pattern
-            PATTERN_APP = Pattern.compile("^    app=(\\d+):(.*?)(:.*)?/(\\d+|u\\d+[asi]\\d+) pid=\\1 uid=(\\d+) user=(\\d+)$");
+            PATTERN_APP = Pattern.compile("^    app=(\\d+):(.*?)(:.*)?/(\\d+|u\\d+[asi]\\d+) pid=\\1 uid=(\\d+) user=(\\d+)$"),
+            PATTERN_AUDIO_FOCUS = Pattern.compile(" -- pack: (.*) -- ");
+
     public static Stream<AndroidAction> getActionsFromReceivers(AndroidDevice device, AndroidTestProfile profile) {
         LinkedList<BroadcastFilter> registeredFilters = new LinkedList<>();
         try {
@@ -64,5 +64,25 @@ public abstract class AndroidAction extends AbstractAction {
                 Arrays.stream(profile.receivers).flatMap(receiver -> receiver.getActions(device, profile.packageName)),
                 registeredFilters.stream().flatMap(filter -> filter.getActions(device, profile.packageName, null))
         );
+    }
+
+    public static Stream<PlacePhoneCall> getActionsFromAudioFocus(AndroidDevice device, AndroidTestProfile profile) {
+        try {
+            Scanner output = new Scanner(device.executeShellCommand("dumpsys audio"));
+            boolean started = false;
+            while (output.hasNextLine()) {
+                String line = output.nextLine();
+                if (started) {
+                    if (line.isEmpty()) break;
+                    Matcher matcher = PATTERN_AUDIO_FOCUS.matcher(line);
+                    if (matcher.matches()) {
+                        if (profile.packageName.equals(matcher.group(1))) return Stream.of(new PlacePhoneCall(device));
+                    } else System.err.printf("Unexpected content in dumpsys audio: %s\n", line);
+                } else if ("Audio Focus stack entries (last is top of stack):".equals(line)) started = true;
+            }
+        } catch (TimeoutException | AdbCommandRejectedException | IOException | ShellCommandUnresponsiveException e) {
+            e.printStackTrace();
+        }
+        return Stream.empty();
     }
 }
