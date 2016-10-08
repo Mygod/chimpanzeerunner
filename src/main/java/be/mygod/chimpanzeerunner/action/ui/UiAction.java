@@ -3,6 +3,7 @@ package be.mygod.chimpanzeerunner.action.ui;
 import be.mygod.chimpanzeerunner.action.AbstractAction;
 import be.mygod.chimpanzeerunner.test.TestManager;
 import io.appium.java_client.MobileElement;
+import org.apache.http.impl.io.SessionInputBufferImpl;
 import org.openqa.selenium.By;
 
 import java.util.LinkedList;

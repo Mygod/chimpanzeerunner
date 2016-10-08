@@ -20,13 +20,13 @@ public class Swipe extends UiAction {
     public boolean perform() {
 //        Rectangle rect = element.getRect();
 //        int x = rect.getWidth() >> 1, y = rect.getHeight() >> 1, centerX = rect.getX() + x, centerY = rect.getY() + y;
-        Point center = element.getCenter();
+        Point point = element.getLocation();
         Dimension size = element.getSize();
-        int x = size.getWidth() >> 1, y = size.getHeight() >> 1, centerX = center.getX(), centerY = center.getY();
+        int x = size.getWidth() >> 1, y = size.getHeight() >> 1, centerX = point.getX() + x, centerY = point.getY() + y;
         if (x == 0 || y == 0) return false;
         if (random.nextBoolean()) x = -x;
         if (random.nextBoolean()) y = -y;
-        ((AppiumDriver) element.getWrappedDriver()).swipe(centerX, centerY, centerX + x, centerX + y,
+        ((AppiumDriver) element.getWrappedDriver()).swipe(centerX, centerY, centerX + x, centerY + y,
                 random.nextInt(1000) + 1);
         return true;
     }
