@@ -22,7 +22,8 @@ import java.util.stream.Stream;
 public abstract class UiAction extends AbstractAction {
     public static Stream<AbstractAction> getActions(TestManager manager) {
         return manager.getDriver().findElements(By.xpath("//*")).stream()
-                .filter(element -> element.isEnabled() && element.isDisplayed()).flatMap(UiAction::getActions);
+                .filter(element -> Boolean.parseBoolean(element.getAttribute("enabled")) &&
+                        Boolean.parseBoolean(element.getAttribute("displayed"))).flatMap(UiAction::getActions);
     }
 
     private static Stream<UiAction> getActions(MobileElement element) {

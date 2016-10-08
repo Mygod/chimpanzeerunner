@@ -2,7 +2,6 @@ package be.mygod.chimpanzeerunner.strategy;
 
 import be.mygod.chimpanzeerunner.action.AbstractAction;
 import be.mygod.chimpanzeerunner.test.TestManager;
-import org.openqa.selenium.NoSuchElementException;
 
 import java.util.Random;
 import java.util.stream.Stream;
