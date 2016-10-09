@@ -3,7 +3,6 @@ package be.mygod.chimpanzeerunner.action.ui;
 import be.mygod.chimpanzeerunner.action.AbstractAction;
 import be.mygod.chimpanzeerunner.test.TestManager;
 import io.appium.java_client.MobileElement;
-import org.apache.http.impl.io.SessionInputBufferImpl;
 import org.openqa.selenium.By;
 
 import java.util.LinkedList;
@@ -21,15 +20,13 @@ import java.util.stream.Stream;
  */
 public abstract class UiAction extends AbstractAction {
     public static Stream<AbstractAction> getActions(TestManager manager) {
-        return manager.getDriver().findElements(By.xpath("//*")).stream()
-                .filter(element -> Boolean.parseBoolean(element.getAttribute("enabled")) &&
-                        Boolean.parseBoolean(element.getAttribute("displayed"))).flatMap(UiAction::getActions);
+        return manager.getDriver().findElements(By.xpath("//*[@enabled='true']")).stream()
+                .filter(element -> Boolean.parseBoolean(element.getAttribute("displayed"))).flatMap(UiAction::getActions);
     }
 
     private static Stream<UiAction> getActions(MobileElement element) {
         LinkedList<UiAction> result = new LinkedList<>();
-        if (Boolean.parseBoolean(element.getAttribute("scrollable")))
-            result.add(new Swipe(element));
+        if (Boolean.parseBoolean(element.getAttribute("scrollable"))) result.add(new Swipe(element));
         if (Boolean.parseBoolean(element.getAttribute("checkable")) ||
                 Boolean.parseBoolean(element.getAttribute("clickable"))) result.add(new Click(element));
         if (Boolean.parseBoolean(element.getAttribute("longClickable"))) result.add(new LongClick(element));

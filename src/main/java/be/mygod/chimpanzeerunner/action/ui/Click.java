@@ -9,7 +9,9 @@ public class Click extends UiAction {
 
     @Override
     public boolean perform() {
+        //long start = System.nanoTime();
         element.click();
+        //System.out.printf("Clicking took %f seconds.\n", (System.nanoTime() - start) * 1e-9);
         return true;
     }
 }
