@@ -1,5 +1,6 @@
 package be.mygod.chimpanzeerunner.test;
 
+import be.mygod.chimpanzeerunner.Automation;
 import be.mygod.chimpanzeerunner.action.AbstractAction;
 import be.mygod.chimpanzeerunner.action.NavigateBack;
 import be.mygod.chimpanzeerunner.action.ui.UiAction;
@@ -9,13 +10,18 @@ import be.mygod.chimpanzeerunner.strategy.AbstractStrategy;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.events.EventFiringWebDriverFactory;
+import io.appium.java_client.remote.AutomationName;
+import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.util.Arrays;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 public abstract class TestManager implements Runnable {
+    private static final String NATIVE_CONTEXT = "NATIVE_APP";
+
     private final TestMaster master;
     protected final TestProfile profile;
     protected final Device device;
@@ -40,16 +46,23 @@ public abstract class TestManager implements Runnable {
     public abstract void navigateBack();
 
     protected Stream<AbstractAction> getActions() {
-        return Stream.concat(
+        AbstractAction[] actions = driver.getContextHandles().stream()
+                .filter(context -> !NATIVE_CONTEXT.equals(context)).flatMap(context -> {
+            driver.context(context);
+            return UiAction.getActions(this);
+        }).toArray(AbstractAction[]::new);
+        driver.context(NATIVE_CONTEXT);
+        return Stream.of(
+                Arrays.stream(actions),
                 UiAction.getActions(this),
                 NavigateBack.getActions(this)
-        );
+        ).flatMap(x -> x);
     }
 
     @Override
     public final void run() {
         AppiumDriverLocalService service = master.request();
-        System.out.printf("Testing profile %s on device %s with service %s...\n", profile, device, service.getUrl());
+        System.out.printf("Testing profile %s on %s with service %s...\n", profile, device, service.getUrl());
         DesiredCapabilities capabilities = new DesiredCapabilities();
         profile.configureCapabilities(capabilities);
         device.configureCapabilities(capabilities);

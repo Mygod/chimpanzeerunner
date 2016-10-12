@@ -8,36 +8,35 @@ import org.openqa.selenium.By;
 import java.util.LinkedList;
 import java.util.stream.Stream;
 
-/**
- * These are Android-specific for now. More info:
- * https://github.com/appium/appium-android-bootstrap/blob/e20f5a8/bootstrap/src/io/appium/android/bootstrap/AndroidElement.java
- *
- * Other stuff that may be used in the future:
- *   element.getAttribute("name") = contentDescription || text
- *   element.getAttribute("resourceId")
- *
- * @author Mygod
- */
 public abstract class UiAction extends AbstractAction {
     public static Stream<AbstractAction> getActions(TestManager manager) {
-        return manager.getDriver().findElements(By.xpath("//*[@enabled='true']")).stream()
-                .filter(element -> Boolean.parseBoolean(element.getAttribute("displayed"))).flatMap(UiAction::getActions);
+//        manager.getDriver().findElements(By.xpath("//*")).forEach(element -> {
+//            try {
+//                System.out.println(element.getAttribute("enabled"));
+//            } catch (Exception ignored) { }
+//        });
+        return manager.getDriver().findElements(By.xpath("//*")).stream()
+                .filter(element -> Boolean.parseBoolean(element.getAttribute("enabled")))
+                .flatMap(element -> UiAction.getActions(manager, element)); // TODO: displayed?
     }
 
-    private static Stream<UiAction> getActions(MobileElement element) {
+    private static Stream<UiAction> getActions(TestManager manager, MobileElement element) {
         LinkedList<UiAction> result = new LinkedList<>();
-        if (Boolean.parseBoolean(element.getAttribute("scrollable"))) result.add(new Swipe(element));
+        if (Boolean.parseBoolean(element.getAttribute("scrollable"))) result.add(new Swipe(manager, element));
         if (Boolean.parseBoolean(element.getAttribute("checkable")) ||
-                Boolean.parseBoolean(element.getAttribute("clickable"))) result.add(new Click(element));
-        if (Boolean.parseBoolean(element.getAttribute("longClickable"))) result.add(new LongClick(element));
+                Boolean.parseBoolean(element.getAttribute("clickable"))) result.add(new Click(manager, element));
+        if (Boolean.parseBoolean(element.getAttribute("longClickable")))
+            result.add(new LongClick(manager, element));
         return result.stream();
     }
 
-    protected UiAction(MobileElement element) {
+    protected UiAction(TestManager manager, MobileElement element) {
+        this.manager = manager;
         this.element = element;
     }
 
-    protected MobileElement element;
+    protected final TestManager manager;
+    protected final MobileElement element;
 
     @Override
     public String toString() {

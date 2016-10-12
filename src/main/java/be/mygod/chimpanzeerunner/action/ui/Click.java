@@ -1,10 +1,11 @@
 package be.mygod.chimpanzeerunner.action.ui;
 
+import be.mygod.chimpanzeerunner.test.TestManager;
 import io.appium.java_client.MobileElement;
 
 public class Click extends UiAction {
-    Click(MobileElement element) {
-        super(element);
+    Click(TestManager manager, MobileElement element) {
+        super(manager, element);
     }
 
     @Override

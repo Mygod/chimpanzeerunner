@@ -1,8 +1,11 @@
 package be.mygod.chimpanzeerunner.android.device;
 
+import be.mygod.chimpanzeerunner.Automation;
 import com.android.ddmlib.*;
 import be.mygod.chimpanzeerunner.device.Device;
 import com.google.common.base.Charsets;
+import io.appium.java_client.remote.AndroidMobileCapabilityType;
+import io.appium.java_client.remote.AutomationName;
 import io.appium.java_client.remote.MobileCapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -29,6 +32,12 @@ public class AndroidDevice extends Device {
     public void configureCapabilities(DesiredCapabilities capabilities) {
         super.configureCapabilities(capabilities);
         capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, device.getName());
+        try {
+            capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, device.getApiLevel() < 19
+                    ? AutomationName.SELENDROID : Automation.NAME_ANDROID_UIAUTOMATOR2);
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
     }
 
     public void executeDeviceCommand(String command) throws IOException {

@@ -1,17 +1,16 @@
 package be.mygod.chimpanzeerunner.action.ui;
 
+import be.mygod.chimpanzeerunner.test.TestManager;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
-import io.appium.java_client.SwipeElementDirection;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
-import org.openqa.selenium.Rectangle;
 
 import java.util.Random;
 
 public class Swipe extends UiAction {
-    Swipe(MobileElement element) {
-        super(element);
+    Swipe(TestManager manager, MobileElement element) {
+        super(manager, element);
     }
 
     private static final Random random = new Random();

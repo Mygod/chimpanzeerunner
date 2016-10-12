@@ -54,7 +54,6 @@ public final class TestMaster implements Runnable {
         }
         if (result != null) return result;
         DesiredCapabilities capabilities = new DesiredCapabilities();   // default capabilities
-        //todo:capabilities.setCapability(MobileCapabilityType.AUTO_WEBVIEW, true);
         capabilities.setCapability(MobileCapabilityType.NO_RESET, true);
         capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 120);
         capabilities.setCapability(AndroidMobileCapabilityType.UNICODE_KEYBOARD, true);   // hmm why not?

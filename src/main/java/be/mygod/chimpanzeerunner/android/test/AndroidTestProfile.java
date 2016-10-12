@@ -59,7 +59,7 @@ public class AndroidTestProfile extends TestProfile {
         try {
             return dev.isOnline() && dev.getApiLevel() >= minSdkVersion;
         } catch (IllegalStateException e) {
-            e.printStackTrace();
+            System.err.printf("%s not ready.\n", device);
             return false;
         }
     }
