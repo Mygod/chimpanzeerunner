@@ -61,6 +61,7 @@ public final class TestMaster implements Runnable {
         File logFile = new File(App.instance.logDir, String.format("appium-%s.log", logFileFormat.format(new Date())));
         System.out.printf("Creating new appium service with log file: %s\n", logFile);
         AppiumDriverLocalService service = new AppiumServiceBuilder()
+                .withIPAddress("127.0.0.1")
                 .usingAnyFreePort()
                 .withCapabilities(capabilities)
                 .withLogFile(logFile)
