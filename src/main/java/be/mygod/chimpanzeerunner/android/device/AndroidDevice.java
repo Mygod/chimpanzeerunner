@@ -34,7 +34,7 @@ public class AndroidDevice extends Device {
         capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, device.getName());
         try {
             capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, device.getApiLevel() < 19
-                    ? AutomationName.SELENDROID : Automation.NAME_ANDROID_UIAUTOMATOR2);
+                    ? AutomationName.SELENDROID : AutomationName.APPIUM);
         } catch (IllegalStateException e) {
             e.printStackTrace();
         }

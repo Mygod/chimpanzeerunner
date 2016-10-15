@@ -15,9 +15,9 @@ public abstract class UiAction extends AbstractAction {
 //                System.out.println(element.getAttribute("enabled"));
 //            } catch (Exception ignored) { }
 //        });
-        return manager.getDriver().findElements(By.xpath("//*")).stream()
-                .filter(element -> Boolean.parseBoolean(element.getAttribute("enabled")))
-                .flatMap(element -> UiAction.getActions(manager, element)); // TODO: displayed?
+        return manager.getDriver().findElements(By.xpath("//*[@enabled='true']")).stream()
+                .filter(element -> Boolean.parseBoolean(element.getAttribute("displayed")))
+                .flatMap(element -> UiAction.getActions(manager, element));
     }
 
     private static Stream<UiAction> getActions(TestManager manager, MobileElement element) {
