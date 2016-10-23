@@ -34,9 +34,9 @@ public class RandomSelectionStrategy extends CountingStrategy {
                 return true;
             } else System.err.printf("No actions found! Retrying...\n");
         } catch (StaleElementReferenceException e) {
-            if ("android.support.test.uiautomator.StaleObjectException".equals(e.getMessage()))
+            if (e.getMessage().startsWith("android.support.test.uiautomator.StaleObjectException\n"))
                 System.err.println("Known issue from Android (https://github.com/appium/appium-uiautomator2-server/issues/29). Retrying later.");
-            else throw e;
+            else e.printStackTrace();
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
