@@ -10,11 +10,6 @@ import java.util.stream.Stream;
 
 public abstract class UiAction extends AbstractAction {
     public static Stream<AbstractAction> getActions(TestManager manager) {
-//        manager.getDriver().findElements(By.xpath("//*")).forEach(element -> {
-//            try {
-//                System.out.println(element.getAttribute("enabled"));
-//            } catch (Exception ignored) { }
-//        });
         return manager.getDriver().findElements(By.xpath("//*[@enabled='true']")).stream()
                 .filter(element -> Boolean.parseBoolean(element.getAttribute("displayed")))
                 .flatMap(element -> UiAction.getActions(manager, element));
