@@ -18,10 +18,13 @@ public abstract class CountingStrategy extends AbstractStrategy {
 
     protected int count = 0;
 
-    protected abstract boolean performCore(Stream<AbstractAction> actions);
+    protected abstract void performCore(Stream<AbstractAction> actions);
     @Override
     public boolean perform(Stream<AbstractAction> actions) {
-        if (count < App.instance.actionsCount && performCore(actions)) ++count;
-        return count < App.instance.actionsCount;
+        if (count < App.instance.actionsCount) {
+            performCore(actions);   // exception may be thrown here
+            return ++count < App.instance.actionsCount;
+        }
+        return false;
     }
 }

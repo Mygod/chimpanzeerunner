@@ -163,7 +163,12 @@ public class BroadcastFilter {
         return actions.stream().flatMap(action -> {
             switch (action) {
                 case "android.appwidget.action.APPWIDGET_UPDATE":
-                //case "android.media.AUDIO_BECOMING_NOISY":  // todo: permission denied
+                case "android.intent.action.MEDIA_SCANNER_FINISHED":
+                case "android.intent.action.UMS_CONNECTED":
+                case "android.intent.action.UMS_DISCONNECTED":
+                    return datas.stream().flatMap(data -> types.stream().map(type ->
+                            new BroadcastIntent(device, packageName, componentName, action, data, type, categories)));
+                case "android.media.AUDIO_BECOMING_NOISY":
                 case "android.intent.action.BATTERY_CHANGED":
                 case "android.intent.action.BATTERY_LOW":
                 case "android.intent.action.BATTERY_OKAY":
@@ -173,7 +178,6 @@ public class BroadcastFilter {
                 case "android.intent.action.INPUT_METHOD_CHANGED":
                 case "android.intent.action.MEDIA_EJECT":
                 case "android.intent.action.MEDIA_MOUNTED":
-                case "android.intent.action.MEDIA_SCANNER_FINISHED":
                 case "android.intent.action.MEDIA_UNMOUNTED":
                 case "android.intent.action.NEW_OUTGOING_CALL":
                 case "android.intent.action.PACKAGE_ADDED":
@@ -184,11 +188,9 @@ public class BroadcastFilter {
                 case "android.intent.action.ACTION_SHUTDOWN":
                 case "android.intent.action.TIME_SET":
                 case "android.intent.action.TIMEZONE_CHANGED":
-                case "android.intent.action.UMS_CONNECTED":
-                case "android.intent.action.UMS_DISCONNECTED":
                 case "android.intent.action.USER_PRESENT":
-                    return datas.stream().flatMap(data -> types.stream().map(type ->
-                            new BroadcastIntent(device, packageName, componentName, action, data, type, categories)));
+                    return datas.stream().flatMap(data -> types.stream().map(type -> new BroadcastIntent(
+                            device, packageName, componentName, action, data, type, categories, true)));    // su
                 // TODO: what about the rest of the data in intent?
                 case "android.intent.action.PHONE_STATE": return Stream.of(new PlacePhoneCall(device));
                 case "android.provider.Telephony.SMS_RECEIVED": return Stream.of(new SendSms(device));

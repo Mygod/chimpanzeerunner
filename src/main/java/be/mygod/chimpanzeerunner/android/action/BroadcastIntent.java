@@ -11,10 +11,10 @@ import java.util.HashSet;
 public class BroadcastIntent extends AndroidAction {
     public final String packageName, componentName, action, dataUri, mimeType;
     public final HashSet<String> categories;
-    public final boolean registeredOnly;
+    public final boolean su, registeredOnly;
 
     public BroadcastIntent(Device device, String packageName, String componentName, String action, String dataUri,
-                           String mimeType, HashSet<String> categories) {
+                           String mimeType, HashSet<String> categories, boolean su) {
         super(device);
         this.packageName = packageName;
         this.componentName = componentName;
@@ -22,13 +22,19 @@ public class BroadcastIntent extends AndroidAction {
         this.categories = categories;
         this.dataUri = dataUri;
         this.mimeType = mimeType;
+        this.su = su;
         registeredOnly = componentName == null;
+    }
+    public BroadcastIntent(Device device, String packageName, String componentName, String action, String dataUri,
+                           String mimeType, HashSet<String> categories) {
+        this(device, packageName, componentName, action, dataUri, mimeType, categories, false);
     }
 
     @Override
     public boolean perform() {
-        // TODO: --user uid?
-        StringBuilder command = new StringBuilder("am broadcast -a ");
+        StringBuilder command = new StringBuilder();
+        if (su) command.append("su 0 ");
+        command.append("am broadcast -a ");
         command.append(action);
         if (dataUri != null) {
             command.append(" -d ");
