@@ -16,7 +16,6 @@ import java.util.HashSet;
 import java.util.function.Function;
 
 public class AndroidDeviceManager extends DeviceManager {
-    private File adbFile;
     private AndroidDebugBridge adbBridge;
 
     @Override
@@ -30,17 +29,8 @@ public class AndroidDeviceManager extends DeviceManager {
             System.err.println("adb not found under platform-tools! Android testing has been disabled.");
             return false;
         }
-        this.adbFile = adbFile;
         AndroidDebugBridge.init(false);
         adbBridge = AndroidDebugBridge.createBridge(adbFile.getAbsolutePath(), false);
-        //New Changes
-        //AndroidDebugBridge.addClientChangeListener(new ClientChangeListener());
-        /*try{
-        ClientData.setMethodProfilingHandler(new MethodProfileHandler(new TextLogger(PropertyParser.baseWorkingDir+"/MethodProfilerLog.txt")));
-        } catch(Exception e){
-            Logger.logError("Problem occured while setting the profile handler");
-            Logger.logException(e);
-        }	*/
         return true;
     }
 

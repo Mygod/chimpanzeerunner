@@ -43,6 +43,7 @@ public abstract class TestManager implements Runnable {
                                                                 DesiredCapabilities capabilities);
     public abstract String getLocation();
     public abstract void navigateBack();
+    protected abstract void cleanUp();
 
     protected Stream<AbstractAction> getActions() {
         AbstractAction[] actions = driver.getContextHandles().stream()
@@ -83,6 +84,7 @@ public abstract class TestManager implements Runnable {
             e.printStackTrace();
         }
         driver.quit();
+        cleanUp();
         master.offer(service);
     }
 }

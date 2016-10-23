@@ -5,6 +5,7 @@ import be.mygod.chimpanzeerunner.android.action.AndroidAction;
 import be.mygod.chimpanzeerunner.android.action.PressMediaButton;
 import be.mygod.chimpanzeerunner.android.device.AndroidDevice;
 import be.mygod.chimpanzeerunner.device.Device;
+import be.mygod.chimpanzeerunner.device.DeviceManager;
 import be.mygod.chimpanzeerunner.strategy.AbstractStrategy;
 import be.mygod.chimpanzeerunner.test.TestManager;
 import be.mygod.chimpanzeerunner.test.TestMaster;
@@ -40,6 +41,12 @@ public class AndroidTestManager extends TestManager {
     @Override
     public void navigateBack() {
         driver.pressKeyCode(4); // android.view.KeyEvent.KEYCODE_BACK
+    }
+
+    @Override
+    protected void cleanUp() {
+        //noinspection ConstantConditions
+        DeviceManager.getAndroid().releaseDevice(device);
     }
 
     @Override

@@ -9,7 +9,7 @@ import be.mygod.chimpanzeerunner.test.TestProfile;
 import java.util.function.Function;
 
 public abstract class DeviceManager {
-    private static AndroidDeviceManager adm;
+    private static DeviceManager adm;
     public static DeviceManager getAndroid() {
         if (adm == null) adm = new AndroidDeviceManager();
         return adm.setup() ? adm : null;
