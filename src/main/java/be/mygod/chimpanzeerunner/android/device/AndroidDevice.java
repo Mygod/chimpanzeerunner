@@ -1,20 +1,16 @@
 package be.mygod.chimpanzeerunner.android.device;
 
 import be.mygod.chimpanzeerunner.Automation;
-import com.android.ddmlib.*;
 import be.mygod.chimpanzeerunner.device.Device;
+import com.android.ddmlib.*;
 import com.google.common.base.Charsets;
-import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.AutomationName;
 import io.appium.java_client.remote.MobileCapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.nio.charset.Charset;
 
 public class AndroidDevice extends Device {
     public final IDevice device;
