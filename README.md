@@ -16,7 +16,7 @@ $ mvn exec:java -Dexec.mainClass=be.mygod.chimpanzeerunner.App -Dexec.args=/path
 
 ## Dependency version
 
-* Node.js: 6.8.1
-* npm: 3.10.9
+* Node.js: 6.8.1 (could be lower)
+* npm: 3.10.9 (could be lower)
 * appium: 1.6.0
 * appium-uiautomator2-driver: 0.0.6
