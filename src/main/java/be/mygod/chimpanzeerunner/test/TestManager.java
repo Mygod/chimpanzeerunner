@@ -1,6 +1,5 @@
 package be.mygod.chimpanzeerunner.test;
 
-import be.mygod.chimpanzeerunner.Automation;
 import be.mygod.chimpanzeerunner.action.AbstractAction;
 import be.mygod.chimpanzeerunner.action.NavigateBack;
 import be.mygod.chimpanzeerunner.action.ui.UiAction;
@@ -10,8 +9,6 @@ import be.mygod.chimpanzeerunner.strategy.AbstractStrategy;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.events.EventFiringWebDriverFactory;
-import io.appium.java_client.remote.AutomationName;
-import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 

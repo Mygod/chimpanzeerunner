@@ -13,3 +13,10 @@ chimpanzeerunner is a more intelligent runner than monkeyrunner.
 $ npm install -g appium
 $ mvn exec:java -Dexec.mainClass=be.mygod.chimpanzeerunner.App -Dexec.args=/path/to/app/files
 ```
+
+## Dependency version
+
+* Node.js: 6.8.1
+* npm: 3.10.9
+* appium: 1.6.0
+* appium-uiautomator2-driver: 0.0.5
