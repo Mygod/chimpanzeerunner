@@ -168,6 +168,7 @@ public class BroadcastFilter {
                 case "android.intent.action.UMS_DISCONNECTED":
                     return datas.stream().flatMap(data -> types.stream().map(type ->
                             new BroadcastIntent(device, packageName, componentName, action, data, type, categories)));
+                // Actions that need su. Source: https://android.googlesource.com/platform/frameworks/base/+/c573661/core/res/AndroidManifest.xml
                 case "android.media.AUDIO_BECOMING_NOISY":
                 case "android.intent.action.BATTERY_CHANGED":
                 case "android.intent.action.BATTERY_LOW":
@@ -190,7 +191,7 @@ public class BroadcastFilter {
                 case "android.intent.action.TIMEZONE_CHANGED":
                 case "android.intent.action.USER_PRESENT":
                     return datas.stream().flatMap(data -> types.stream().map(type -> new BroadcastIntent(
-                            device, packageName, componentName, action, data, type, categories, true)));    // su
+                            device, packageName, componentName, action, data, type, categories, true)));
                 // TODO: what about the rest of the data in intent?
                 case "android.intent.action.PHONE_STATE": return Stream.of(new PlacePhoneCall(device));
                 case "android.provider.Telephony.SMS_RECEIVED": return Stream.of(new SendSms(device));
