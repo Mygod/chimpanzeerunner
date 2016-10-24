@@ -12,7 +12,6 @@ import java.util.stream.Stream;
 public abstract class UiAction extends AbstractAction {
     public static Stream<AbstractAction> getActions(TestManager manager) {
         return manager.getDriver().findElements(By.xpath("//*[@enabled='true']")).stream()
-                .filter(element -> Boolean.parseBoolean(element.getAttribute("displayed"))) // TODO: blocked by https://github.com/appium/appium/issues/6974
                 .flatMap(element -> UiAction.getActions(manager, element));
     }
 
