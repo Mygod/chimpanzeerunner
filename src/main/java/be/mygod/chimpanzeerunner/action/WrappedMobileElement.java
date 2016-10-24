@@ -18,4 +18,9 @@ public class WrappedMobileElement {
         inner = element;
         className = Lazy.wrap(() -> inner.getAttribute("className"));
     }
+
+    @Override
+    public String toString() {
+        return className.get() + ':' + inner.getId();
+    }
 }

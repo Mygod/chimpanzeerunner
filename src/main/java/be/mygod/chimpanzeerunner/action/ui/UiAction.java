@@ -37,6 +37,6 @@ public abstract class UiAction extends AbstractAction {
 
     @Override
     public String toString() {
-        return super.toString() + ':' + element.className.get() + ':' + element.inner.getId();
+        return super.toString() + ':' + element;
     }
 }
