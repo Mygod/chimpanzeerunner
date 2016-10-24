@@ -16,6 +16,7 @@ class LogDumper implements AutoCloseable, IShellOutputReceiver, Runnable {
     LogDumper(IDevice device) throws IOException {
         out = new BufferedOutputStream(new FileOutputStream(
                 App.instance.createLogFile("android-" + (this.device = device).toString())));
+        new Thread(this).start();
     }
 
     @Override

@@ -17,7 +17,7 @@ public class AndroidDevice extends Device {
     private final LogDumper dumper;
 
     public AndroidDevice(IDevice device) throws IOException {
-        new Thread(dumper = new LogDumper(this.device = device)).start();
+        dumper = new LogDumper(this.device = device);
     }
 
     @Override
