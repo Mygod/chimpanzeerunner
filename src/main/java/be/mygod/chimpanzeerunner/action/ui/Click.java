@@ -1,16 +1,16 @@
 package be.mygod.chimpanzeerunner.action.ui;
 
+import be.mygod.chimpanzeerunner.action.WrappedMobileElement;
 import be.mygod.chimpanzeerunner.test.TestManager;
-import io.appium.java_client.MobileElement;
 
 public class Click extends UiAction {
-    Click(TestManager manager, MobileElement element) {
+    Click(TestManager manager, WrappedMobileElement element) {
         super(manager, element);
     }
 
     @Override
     public boolean perform() {
-        element.click();
+        element.inner.click();
         return true;
     }
 }
