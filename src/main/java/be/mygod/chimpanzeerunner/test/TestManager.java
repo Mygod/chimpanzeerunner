@@ -80,7 +80,7 @@ public abstract class TestManager implements Runnable {
                     if (!strategy.perform(getActions().distinct())) break;
                 } catch (StaleElementReferenceException e) {
                     if (e.getMessage().startsWith("android.support.test.uiautomator.StaleObjectException\n"))
-                        System.err.println("Known issue from Android (https://github.com/appium/appium-uiautomator2-server/issues/29). Retrying later.");
+                        System.err.println("Element not found. It could be a [known issue](https://github.com/appium/appium-uiautomator2-server/issues/29). Retrying later.");
                     else e.printStackTrace();
                 } catch (RuntimeException e) {
                     e.printStackTrace();
