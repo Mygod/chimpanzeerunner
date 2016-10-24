@@ -12,6 +12,7 @@ import be.mygod.chimpanzeerunner.device.Device;
 import be.mygod.chimpanzeerunner.device.DeviceManager;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.function.Function;
 
@@ -43,18 +44,21 @@ public class AndroidDeviceManager extends DeviceManager {
     @Override
     public Device tryGetFreeDevice(Function<Device, Boolean> filter) {
         synchronized (busyDevices) {
-            for (IDevice device : adbBridge.getDevices()) if (!busyDevices.contains(device.toString())) {
+            for (IDevice device : adbBridge.getDevices()) if (!busyDevices.contains(device.toString())) try {
                 Device dev = new AndroidDevice(device);
                 if (filter == null || filter.apply(dev)) {
                     busyDevices.add(device.toString());
                     return dev;
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
         return null;
     }
     @Override
     public boolean releaseDevice(Device device) {
+        device.release();
         synchronized (busyDevices) {
             return busyDevices.remove(device.toString());
         }

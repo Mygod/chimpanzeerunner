@@ -14,9 +14,10 @@ import java.net.Socket;
 
 public class AndroidDevice extends Device {
     public final IDevice device;
+    private final LogDumper dumper;
 
-    public AndroidDevice(IDevice device) {
-        this.device = device;
+    public AndroidDevice(IDevice device) throws IOException {
+        new Thread(dumper = new LogDumper(this.device = device)).start();
     }
 
     @Override
@@ -32,6 +33,16 @@ public class AndroidDevice extends Device {
             capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, device.getApiLevel() < 19
                     ? AutomationName.SELENDROID : Automation.NAME_ANDROID_UIAUTOMATOR2);
         } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void release() {
+        super.release();
+        try {
+            dumper.close();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

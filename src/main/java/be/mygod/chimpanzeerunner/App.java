@@ -12,6 +12,8 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
 
@@ -57,5 +59,10 @@ public final class App {
         }
         new TestMaster(TestProfile.createFromPaths(paths), strategy).run();
         DeviceManager.cleanUp();
+    }
+
+    private static final SimpleDateFormat logFileFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+    public File createLogFile(String prefix) {
+        return new File(logDirectory, String.format("%s-%s.log", prefix, logFileFormat.format(new Date())));
     }
 }

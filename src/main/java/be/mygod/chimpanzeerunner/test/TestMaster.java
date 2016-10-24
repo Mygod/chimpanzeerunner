@@ -14,8 +14,10 @@ import java.io.File;
 import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.function.Function;
 
 /**
@@ -25,7 +27,6 @@ import java.util.function.Function;
  */
 public final class TestMaster implements Runnable {
     private static Field streamField, streamsField;
-    private static final SimpleDateFormat logFileFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
     static {
         try {
             streamField = AppiumDriverLocalService.class.getDeclaredField("stream");
@@ -58,7 +59,7 @@ public final class TestMaster implements Runnable {
         capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 120);
         capabilities.setCapability(AndroidMobileCapabilityType.UNICODE_KEYBOARD, true);   // hmm why not?
         capabilities.setCapability(AndroidMobileCapabilityType.RESET_KEYBOARD, true);
-        File logFile = new File(App.instance.logDir, String.format("appium-%s.log", logFileFormat.format(new Date())));
+        File logFile = App.instance.createLogFile("appium");
         System.out.printf("Creating new appium service with log file: %s\n", logFile);
         AppiumDriverLocalService service = new AppiumServiceBuilder()
                 .withIPAddress("127.0.0.1")

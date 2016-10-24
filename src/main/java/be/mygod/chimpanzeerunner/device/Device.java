@@ -22,4 +22,5 @@ public abstract class Device {
     }
 
     public void configureCapabilities(DesiredCapabilities capabilities) { }
+    public void release() { }
 }
