@@ -15,6 +15,8 @@ import java.util.function.Supplier;
  *                          focusable="true" focused="false" scrollable="false" long-clickable="true" password="false"
  *                          selected="false" bounds="[384,777][572,974]" resource-id="" instance="1"/>
  *
+ * See also: https://github.com/appium/appium-uiautomator2-server/blob/4e99400/app/src/main/java/io/appium/uiautomator2/core/AccessibilityNodeInfoDumper.java#L96
+ *
  * @author Mygod
  */
 public class WrappedMobileElement {
