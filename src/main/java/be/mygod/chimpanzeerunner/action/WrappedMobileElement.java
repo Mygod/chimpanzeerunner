@@ -8,6 +8,13 @@ import java.util.function.Supplier;
 /**
  * This is needed so that getAttribute calls can be lazily computed.
  *
+ * An example element would look like this:
+ *
+ * <android.widget.TextView index="1" text="Settings" class="android.widget.TextView" package="com.android.launcher3"
+ *                          content-desc="Settings" checkable="false" checked="false" clickable="true" enabled="true"
+ *                          focusable="true" focused="false" scrollable="false" long-clickable="true" password="false"
+ *                          selected="false" bounds="[384,777][572,974]" resource-id="" instance="1"/>
+ *
  * @author Mygod
  */
 public class WrappedMobileElement {
