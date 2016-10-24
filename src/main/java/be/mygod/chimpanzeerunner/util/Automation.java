@@ -1,4 +1,4 @@
-package be.mygod.chimpanzeerunner;
+package be.mygod.chimpanzeerunner.util;
 
 public abstract class Automation {
     private Automation() { }

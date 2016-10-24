@@ -1,6 +1,6 @@
 package be.mygod.chimpanzeerunner.android.device;
 
-import be.mygod.chimpanzeerunner.Automation;
+import be.mygod.chimpanzeerunner.util.Automation;
 import be.mygod.chimpanzeerunner.device.Device;
 import com.android.ddmlib.*;
 import com.google.common.base.Charsets;
