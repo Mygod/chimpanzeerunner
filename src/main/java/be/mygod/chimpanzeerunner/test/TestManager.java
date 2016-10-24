@@ -67,24 +67,30 @@ public abstract class TestManager implements Runnable {
     @Override
     public final void run() {
         AppiumDriverLocalService service = master.request();
-        System.out.printf("Testing profile %s on %s with service %s...\n", profile, device, service.getUrl());
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-        profile.configureCapabilities(capabilities);
-        device.configureCapabilities(capabilities);
-        driver = EventFiringWebDriverFactory.getEventFiringWebDriver(createDriver(service, capabilities),
-                AppiumListener.getListeners(this));
-        AbstractStrategy strategy = strategyFactory.apply(this);
-        for (;;) try {
-            if (!strategy.perform(getActions().distinct())) break;
-        } catch (StaleElementReferenceException e) {
-            if (e.getMessage().startsWith("android.support.test.uiautomator.StaleObjectException\n"))
-                System.err.println("Known issue from Android (https://github.com/appium/appium-uiautomator2-server/issues/29). Retrying later.");
-            else e.printStackTrace();
-        } catch (RuntimeException e) {
-            e.printStackTrace();
+        try {
+            System.out.printf("Testing profile %s on %s with service %s...\n", profile, device, service.getUrl());
+            DesiredCapabilities capabilities = new DesiredCapabilities();
+            profile.configureCapabilities(capabilities);
+            device.configureCapabilities(capabilities);
+            driver = EventFiringWebDriverFactory.getEventFiringWebDriver(createDriver(service, capabilities),
+                    AppiumListener.getListeners(this));
+            try {
+                AbstractStrategy strategy = strategyFactory.apply(this);
+                for (;;) try {
+                    if (!strategy.perform(getActions().distinct())) break;
+                } catch (StaleElementReferenceException e) {
+                    if (e.getMessage().startsWith("android.support.test.uiautomator.StaleObjectException\n"))
+                        System.err.println("Known issue from Android (https://github.com/appium/appium-uiautomator2-server/issues/29). Retrying later.");
+                    else e.printStackTrace();
+                } catch (RuntimeException e) {
+                    e.printStackTrace();
+                }
+            } finally {
+                driver.quit();
+            }
+        } finally {
+            cleanUp();
+            master.offer(service);
         }
-        driver.quit();
-        cleanUp();
-        master.offer(service);
     }
 }
