@@ -10,13 +10,21 @@ import be.mygod.chimpanzeerunner.strategy.AbstractStrategy;
 import be.mygod.chimpanzeerunner.test.TestManager;
 import be.mygod.chimpanzeerunner.test.TestMaster;
 import be.mygod.chimpanzeerunner.test.TestProfile;
+import com.android.ddmlib.AdbCommandRejectedException;
+import com.android.ddmlib.ShellCommandUnresponsiveException;
+import com.android.ddmlib.TimeoutException;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class AndroidTestManager extends TestManager {
@@ -33,9 +41,23 @@ public class AndroidTestManager extends TestManager {
     }
 
     @Override
-    public String getLocation() {
+    public String getPackageName() {
+        return ((AndroidTestProfile) profile).packageName;
+    }
+
+    private static final Pattern
+            PATTERN_CURRENT_FOCUS = Pattern.compile("^  mFocusedApp=AppWindowToken\\{[0-9a-fA-F]+ token=Token\\{[0-9a-fA-F]+ ActivityRecord\\{[0-9a-fA-F]+ u\\d+ (.+/.+) t\\d+}}}$", Pattern.MULTILINE);
+    @Override
+    public URI getLocation() {
         // TODO: better detection for back availability
-        return driver.currentActivity();
+        AndroidDevice device = (AndroidDevice) this.device;
+        try {
+            Matcher matcher = PATTERN_CURRENT_FOCUS.matcher(device.executeShellCommand("dumpsys window windows"));
+            if (matcher.find()) return new URI("android://" + matcher.group(1));
+        } catch (TimeoutException | AdbCommandRejectedException | IOException | ShellCommandUnresponsiveException | URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

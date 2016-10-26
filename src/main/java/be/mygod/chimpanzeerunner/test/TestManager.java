@@ -14,6 +14,7 @@ import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -41,7 +42,8 @@ public abstract class TestManager implements Runnable {
 
     protected abstract AppiumDriver<MobileElement> createDriver(AppiumDriverLocalService service,
                                                                 DesiredCapabilities capabilities);
-    public abstract String getLocation();
+    public abstract String getPackageName();
+    public abstract URI getLocation();
     public abstract void navigateBack();
     protected abstract void cleanUp();
 
@@ -78,6 +80,9 @@ public abstract class TestManager implements Runnable {
                 AbstractStrategy strategy = strategyFactory.apply(this);
                 for (;;) try {
                     if (!strategy.perform(getActions().distinct())) break;
+                } catch (TestAbortException e) {
+                    System.err.println(e.getMessage());
+                    break;
                 } catch (StaleElementReferenceException e) {
                     if (e.getMessage().startsWith("android.support.test.uiautomator.StaleObjectException\n"))
                         System.err.println("Element not found. It could be a [known issue](https://github.com/appium/appium-uiautomator2-server/issues/29). Retrying later.");
