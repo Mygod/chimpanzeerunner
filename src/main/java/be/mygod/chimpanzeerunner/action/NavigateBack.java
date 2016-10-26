@@ -18,6 +18,7 @@ public class NavigateBack extends AbstractAction {
         HashSet<URI> list;
         try {
             list = new HashSet<>(Arrays.asList(
+                    new URI("android://com.android.documentsui/.DocumentsActivity"),
                     new URI("android://com.android.packageinstaller/.permission.ui.GrantPermissionsActivity"),
                     new URI("android://com.android.settings/.Settings$AppWriteSettingsActivity")
             ));
