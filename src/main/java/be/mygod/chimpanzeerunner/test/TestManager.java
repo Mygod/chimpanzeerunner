@@ -48,6 +48,7 @@ public abstract class TestManager implements Runnable {
     protected abstract void cleanUp();
 
     protected Stream<AbstractAction> getActions() {
+        Stream<AbstractAction> backAction = NavigateBack.getActions(this);
         AbstractAction[] actions = driver.getContextHandles().stream()
                 .filter(context -> !NATIVE_CONTEXT.equals(context)).flatMap(context -> {
             try {
@@ -60,9 +61,9 @@ public abstract class TestManager implements Runnable {
         }).toArray(AbstractAction[]::new);
         driver.context(NATIVE_CONTEXT);
         return Stream.of(
+                backAction,
                 Arrays.stream(actions),
-                UiAction.getActions(this),
-                NavigateBack.getActions(this)
+                UiAction.getActions(this)
         ).flatMap(x -> x);
     }
 
