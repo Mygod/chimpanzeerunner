@@ -29,16 +29,15 @@ public class NavigateBack extends AbstractAction {
     }
 
     public static Stream<AbstractAction> getActions(TestManager manager) {
-        URI location = null;
-        int i;
-        for (i = 10; i > 0; --i) {
+        URI location;
+        for (int i = 0; ; ++i) {
+            if (i >= 10) throw new TestAbortException("Unexpected location.");
             location = manager.getLocation();
             if (manager.getPackageName().equals(location.getHost()) || URI_WHITE_LIST.contains(location)) break; else {
                 System.out.printf("Unexpected location: %s. Pressing back in hope of returning to original package...\n", location);
                 manager.navigateBack();
             }
         }
-        if (i <= 0) throw new TestAbortException("Unexpected location.");
         if (!initialLocation.containsKey(manager)) initialLocation.put(manager, location);
         else if (!initialLocation.get(manager).equals(location)) return Stream.of(new NavigateBack(manager));
         return Stream.empty();
