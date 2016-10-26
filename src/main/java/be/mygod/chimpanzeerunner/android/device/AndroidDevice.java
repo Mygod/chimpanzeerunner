@@ -14,10 +14,10 @@ import java.net.Socket;
 
 public class AndroidDevice extends Device {
     public final IDevice device;
-    private final LogDumper dumper;
+    private final LogcatDumper dumper;
 
     public AndroidDevice(IDevice device) throws IOException {
-        dumper = new LogDumper(this.device = device);
+        dumper = new LogcatDumper(this.device = device);
     }
 
     @Override

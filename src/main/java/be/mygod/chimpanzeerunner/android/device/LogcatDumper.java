@@ -7,13 +7,13 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-class LogDumper implements AutoCloseable, IShellOutputReceiver, Runnable {
+class LogcatDumper implements AutoCloseable, IShellOutputReceiver, Runnable {
     private static final SimpleDateFormat logcatFormat = new SimpleDateFormat("y-M-d H:mm:ss.SSS");
     private final IDevice device;
     private boolean cancelled;
     private BufferedOutputStream out;
 
-    LogDumper(IDevice device) throws IOException {
+    LogcatDumper(IDevice device) throws IOException {
         out = new BufferedOutputStream(new FileOutputStream(
                 App.instance.createLogFile("android-" + (this.device = device).toString())));
         new Thread(this).start();
@@ -22,7 +22,9 @@ class LogDumper implements AutoCloseable, IShellOutputReceiver, Runnable {
     @Override
     public void run() {
         try {
-            device.executeShellCommand(String.format("logcat -T '%s'", logcatFormat.format(new Date())), this);
+            //noinspection deprecation
+            device.executeShellCommand(String.format("logcat -T '%s'", logcatFormat.format(new Date())), this,
+                    Integer.MAX_VALUE);
         } catch (AdbCommandRejectedException | ShellCommandUnresponsiveException | IOException | TimeoutException e) {
             e.printStackTrace();
         }
