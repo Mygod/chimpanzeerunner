@@ -23,13 +23,10 @@ public class RandomSelectionStrategy extends CountingStrategy {
     }
 
     @Override
-    public void performCore(Stream<AbstractAction> actions) {
+    public AbstractAction select(Stream<AbstractAction> actions) {
         ActionSelector selector = new ActionSelector();
         actions.forEach(selector::supply);
-        if (selector.action != null) {
-            System.out.printf("Performing action #%d: %s\n", count, selector.action);
-            selector.action.perform();
-        } else System.err.printf("No actions found! Retrying...\n");
+        return selector.action;
     }
 
     @Override
