@@ -1,5 +1,6 @@
 package be.mygod.chimpanzeerunner.device;
 
+import be.mygod.chimpanzeerunner.test.Automation;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 public abstract class Device {
@@ -21,6 +22,7 @@ public abstract class Device {
         return "Device_Unknown";
     }
 
+    public abstract Automation getAutomation();
     public void configureCapabilities(DesiredCapabilities capabilities) { }
     public void release() { }
 }

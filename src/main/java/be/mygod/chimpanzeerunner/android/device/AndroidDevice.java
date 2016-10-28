@@ -1,7 +1,9 @@
 package be.mygod.chimpanzeerunner.android.device;
 
-import be.mygod.chimpanzeerunner.util.Automation;
+import be.mygod.chimpanzeerunner.test.Automation;
 import be.mygod.chimpanzeerunner.device.Device;
+import be.mygod.chimpanzeerunner.test.Selendroid;
+import be.mygod.chimpanzeerunner.test.UIAutomator2;
 import com.android.ddmlib.*;
 import com.google.common.base.Charsets;
 import io.appium.java_client.remote.AutomationName;
@@ -25,16 +27,19 @@ public class AndroidDevice extends Device {
         return "AndroidDevice_" + device.toString();
     }
 
+    /**
+     * Throws IllegalStateException.
+     * @return Teh automation!
+     */
+    @Override
+    public Automation getAutomation() {
+        return device.getApiLevel() < 19 ? new Selendroid() : new UIAutomator2();
+    }
+
     @Override
     public void configureCapabilities(DesiredCapabilities capabilities) {
         super.configureCapabilities(capabilities);
         capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, device.getName());
-        try {
-            capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, device.getApiLevel() < 19
-                    ? AutomationName.SELENDROID : Automation.NAME_ANDROID_UIAUTOMATOR2);
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

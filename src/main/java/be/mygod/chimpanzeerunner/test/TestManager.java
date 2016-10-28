@@ -9,6 +9,7 @@ import be.mygod.chimpanzeerunner.strategy.AbstractStrategy;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.events.EventFiringWebDriverFactory;
+import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -75,6 +76,8 @@ public abstract class TestManager implements Runnable {
             DesiredCapabilities capabilities = new DesiredCapabilities();
             profile.configureCapabilities(capabilities);
             device.configureCapabilities(capabilities);
+            Automation automation = device.getAutomation();
+            capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, automation.getName());
             driver = EventFiringWebDriverFactory.getEventFiringWebDriver(createDriver(service, capabilities),
                     AppiumListener.getListeners(this));
             try {
