@@ -12,7 +12,6 @@ import io.appium.java_client.events.EventFiringWebDriverFactory;
 import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -24,7 +23,6 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 public abstract class TestManager implements Runnable {
-    private static final String NATIVE_CONTEXT = "NATIVE_APP";
     private static final HashSet<URI> URI_WHITE_LIST;
 
     static {
@@ -68,26 +66,10 @@ public abstract class TestManager implements Runnable {
     protected abstract void cleanUp();
 
     protected Stream<AbstractAction> getActions(URI location) {
-        UiAction[] actions = driver.getContextHandles().stream()
-                .filter(context -> !NATIVE_CONTEXT.equals(context)).flatMap(context -> {
-            try {
-                driver.context(context);
-                URI uri = new URI(driver.getCurrentUrl());
-                if ("file".equals(uri.getScheme()))
-                    ;   //TODO:return UiAction.getActions(this, uri);
-            } catch (NoSuchSessionException e) {
-                System.err.printf("Context %s not found. Skipping...\n", context);
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            }
-            return Stream.empty();
-        }).toArray(UiAction[]::new);
-        driver.context(NATIVE_CONTEXT);
-        return Stream.of(
-                Arrays.stream(actions),
+        return Stream.concat(
                 UiAction.getActions(this, location),
                 NavigateBack.getActions(this, location)
-        ).flatMap(x -> x);
+        );
     }
 
     @Override
