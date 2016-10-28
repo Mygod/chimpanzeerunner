@@ -1,11 +1,11 @@
-package be.mygod.chimpanzeerunner.action.ui;
+package be.mygod.chimpanzeerunner.action.view;
 
 import be.mygod.chimpanzeerunner.test.TestManager;
 import be.mygod.chimpanzeerunner.view.View;
 
 import java.util.Random;
 
-public class Swipe extends UiAction {
+public class Swipe extends ViewAction {
     Swipe(TestManager manager, View view) {
         super(manager, view);
     }

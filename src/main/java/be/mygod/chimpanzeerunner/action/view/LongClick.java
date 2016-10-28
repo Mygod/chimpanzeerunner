@@ -1,9 +1,9 @@
-package be.mygod.chimpanzeerunner.action.ui;
+package be.mygod.chimpanzeerunner.action.view;
 
 import be.mygod.chimpanzeerunner.test.TestManager;
 import be.mygod.chimpanzeerunner.view.View;
 
-public class LongClick extends UiAction {
+public class LongClick extends ViewAction {
     LongClick(TestManager manager, View view) {
         super(manager, view);
     }

@@ -1,4 +1,4 @@
-package be.mygod.chimpanzeerunner.action.ui;
+package be.mygod.chimpanzeerunner.action.view;
 
 import be.mygod.chimpanzeerunner.action.AbstractAction;
 import be.mygod.chimpanzeerunner.test.TestManager;
@@ -14,8 +14,8 @@ import java.net.URI;
 import java.util.LinkedList;
 import java.util.stream.Stream;
 
-public abstract class UiAction extends AbstractAction {
-    public static Stream<UiAction> getActions(TestManager manager, URI location) {
+public abstract class ViewAction extends AbstractAction {
+    public static Stream<ViewAction> getActions(TestManager manager, URI location) {
         try {
             return getActions(manager, new Activity(location, manager.getDriver().getPageSource()).root);
         } catch (IOException | SAXException | ParserConfigurationException e) {
@@ -24,16 +24,16 @@ public abstract class UiAction extends AbstractAction {
         return Stream.empty();
     }
 
-    private static Stream<UiAction> getActions(TestManager manager, View view) {
+    private static Stream<ViewAction> getActions(TestManager manager, View view) {
         if (!view.enabled) return Stream.empty();
-        LinkedList<UiAction> result = new LinkedList<>();
+        LinkedList<ViewAction> result = new LinkedList<>();
         if (view.scrollable) result.add(new Swipe(manager, view));
         if (view.checkable || view.clickable) result.add(new Click(manager, view));
         if (view.longClickable) result.add(new LongClick(manager, view));
         return Stream.concat(result.stream(), view.stream().flatMap(child -> getActions(manager, child)));
     }
 
-    protected UiAction(TestManager manager, View view) {
+    protected ViewAction(TestManager manager, View view) {
         this.manager = manager;
         this.view = view;
     }

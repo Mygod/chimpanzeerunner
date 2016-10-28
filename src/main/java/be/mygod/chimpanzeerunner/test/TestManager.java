@@ -2,7 +2,7 @@ package be.mygod.chimpanzeerunner.test;
 
 import be.mygod.chimpanzeerunner.action.AbstractAction;
 import be.mygod.chimpanzeerunner.action.NavigateBack;
-import be.mygod.chimpanzeerunner.action.ui.UiAction;
+import be.mygod.chimpanzeerunner.action.view.ViewAction;
 import be.mygod.chimpanzeerunner.device.Device;
 import be.mygod.chimpanzeerunner.listener.AppiumListener;
 import be.mygod.chimpanzeerunner.strategy.AbstractStrategy;
@@ -67,7 +67,7 @@ public abstract class TestManager implements Runnable {
 
     protected Stream<AbstractAction> getActions(URI location) {
         return Stream.concat(
-                UiAction.getActions(this, location),
+                ViewAction.getActions(this, location),
                 NavigateBack.getActions(this, location)
         );
     }
