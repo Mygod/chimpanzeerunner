@@ -72,11 +72,11 @@ public class AndroidTestManager extends TestManager {
     }
 
     @Override
-    protected Stream<AbstractAction> getActions() {
+    protected Stream<AbstractAction> getActions(URI location) {
         AndroidDevice device = (AndroidDevice) this.device;
         AndroidTestProfile profile = (AndroidTestProfile) this.profile;
         return Stream.of(
-                super.getActions(),
+                super.getActions(location),
                 AndroidAction.getActionsFromReceivers(device, profile),
                 AndroidAction.getActionsFromAudioFocus(device, profile),
                 PressMediaButton.getActions(device, profile)

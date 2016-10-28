@@ -1,16 +1,16 @@
 package be.mygod.chimpanzeerunner.action.ui;
 
-import be.mygod.chimpanzeerunner.action.WrappedMobileElement;
 import be.mygod.chimpanzeerunner.test.TestManager;
+import be.mygod.chimpanzeerunner.view.View;
 
 public class LongClick extends UiAction {
-    LongClick(TestManager manager, WrappedMobileElement element) {
-        super(manager, element);
+    LongClick(TestManager manager, View view) {
+        super(manager, view);
     }
 
     @Override
     public boolean perform() {
-        element.inner.tap(1, 500);
+        getElement().tap(1, 500);
         return true;
     }
 }

@@ -5,6 +5,7 @@ import be.mygod.chimpanzeerunner.android.os.BroadcastReceiver;
 import be.mygod.chimpanzeerunner.device.Device;
 import be.mygod.chimpanzeerunner.device.DeviceManager;
 import be.mygod.chimpanzeerunner.test.TestProfile;
+import be.mygod.chimpanzeerunner.util.Xml;
 import com.android.ddmlib.IDevice;
 import io.appium.java_client.remote.MobileCapabilityType;
 import net.dongliu.apk.parser.ApkParser;
@@ -13,18 +14,13 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.springframework.util.xml.DomUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
 
 public class AndroidTestProfile extends TestProfile {
-    private static final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-
     public AndroidTestProfile(File file) throws IOException, ParserConfigurationException, SAXException {
         super(file);
         try (ApkParser parser = new ApkParser(appFile)) {
@@ -32,8 +28,7 @@ public class AndroidTestProfile extends TestProfile {
             packageName = meta.getPackageName();
             name = String.format("%s %s (%d)", meta.getName(), meta.getVersionName(), meta.getVersionCode());
             minSdkVersion = Integer.parseInt(meta.getMinSdkVersion());
-            Document manifest = dbf.newDocumentBuilder()
-                    .parse(new InputSource(new StringReader(parser.getManifestXml())));
+            Document manifest = Xml.parse(parser.getManifestXml());
             Element application = DomUtils.getChildElementByTagName(manifest.getDocumentElement(), "application");
             receivers = DomUtils.getChildElements(application).stream()
                     .filter(element -> "receiver".equals(element.getNodeName()))
