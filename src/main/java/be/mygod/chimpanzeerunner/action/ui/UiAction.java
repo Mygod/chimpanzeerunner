@@ -40,8 +40,14 @@ public abstract class UiAction extends AbstractAction {
     protected final TestManager manager;
     protected final View view;
 
+    /**
+     * TODO: Replace formatting with xpath after this issue is fixed: https://github.com/appium/appium-uiautomator2-server/issues/34
+     *
+     * @return The element that needs action.
+     */
     protected final MobileElement getElement() {
-        return manager.getDriver().findElement(By.xpath(view.getXPath()));
+        String xpath = view.getXPath();
+        return manager.getDriver().findElement(By.xpath(String.format("%s|/hierarchy%s", xpath, xpath)));
     }
 
     @Override
