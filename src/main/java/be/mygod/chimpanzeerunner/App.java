@@ -1,10 +1,7 @@
 package be.mygod.chimpanzeerunner;
 
 import be.mygod.chimpanzeerunner.device.DeviceManager;
-import be.mygod.chimpanzeerunner.strategy.AbstractStrategy;
-import be.mygod.chimpanzeerunner.strategy.InvalidStrategy;
-import be.mygod.chimpanzeerunner.strategy.RandomSelectionStrategy;
-import be.mygod.chimpanzeerunner.strategy.StrategyParser;
+import be.mygod.chimpanzeerunner.strategy.*;
 import be.mygod.chimpanzeerunner.test.TestManager;
 import be.mygod.chimpanzeerunner.test.TestMaster;
 import be.mygod.chimpanzeerunner.test.TestProfile;
@@ -18,9 +15,9 @@ import java.util.List;
 import java.util.function.Function;
 
 public final class App {
-    @Parameter(names = {"-s", "--strategy"}, description = "Strategy to use.                                                      " +
-            "Default: random", converter = StrategyParser.class)
-    public Function<TestManager, AbstractStrategy> strategy = RandomSelectionStrategy::new;
+    @Parameter(names = {"-s", "--strategy"}, description = "Strategy to use. Available options: random, random-bias               " +
+            "Default: random-bias", converter = StrategyParser.class)
+    public Function<TestManager, AbstractStrategy> strategy = RandomBiasSelectionStrategy::new;
 
     @Parameter(names = {"-c", "--count"}, description = "Specify total count of actions to taken.                                 " +
             "Only apply to the following strategies: random")
