@@ -5,7 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Bounds {
-    private static final Pattern PATTERN = Pattern.compile("^\\[(\\d+),(\\d+)\\]\\[(\\d+),(\\d+)\\]$");
+    private static final Pattern PATTERN = Pattern.compile("^\\[(-?\\d+),(-?\\d+)\\]\\[(-?\\d+),(-?\\d+)\\]$");
 
     public final int left, top, right, bottom;
 
