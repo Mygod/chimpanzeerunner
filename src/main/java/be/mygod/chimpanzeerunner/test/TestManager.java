@@ -95,6 +95,11 @@ public abstract class TestManager implements Runnable {
                         else {
                             System.out.printf("Unexpected location: %s. Pressing back in hope of returning to original package...\n", location);
                             navigateBack();
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                     if (!strategy.perform(getActions(location).distinct())) break;
