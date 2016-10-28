@@ -26,6 +26,11 @@ class LogcatDumper implements AutoCloseable, IShellOutputReceiver, Runnable {
             device.executeShellCommand(String.format("logcat -T '%s'", logcatFormat.format(new Date())), this, 0);
         } catch (AdbCommandRejectedException | ShellCommandUnresponsiveException | IOException | TimeoutException e) {
             e.printStackTrace();
+            try {
+                close();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
         }
     }
 
