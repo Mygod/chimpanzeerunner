@@ -72,11 +72,15 @@ public abstract class TestManager implements Runnable {
                 .filter(context -> !NATIVE_CONTEXT.equals(context)).flatMap(context -> {
             try {
                 driver.context(context);
-                return UiAction.getActions(this, location);
+                URI uri = new URI(driver.getCurrentUrl());
+                if ("file".equals(uri.getScheme()))
+                    ;   //TODO:return UiAction.getActions(this, uri);
             } catch (NoSuchSessionException e) {
                 System.err.printf("Context %s not found. Skipping...\n", context);
-                return Stream.empty();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
             }
+            return Stream.empty();
         }).toArray(UiAction[]::new);
         driver.context(NATIVE_CONTEXT);
         return Stream.of(
