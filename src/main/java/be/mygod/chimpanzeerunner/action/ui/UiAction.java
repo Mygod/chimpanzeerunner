@@ -25,6 +25,7 @@ public abstract class UiAction extends AbstractAction {
     }
 
     private static Stream<UiAction> getActions(TestManager manager, View view) {
+        if (!view.enabled) return Stream.empty();
         LinkedList<UiAction> result = new LinkedList<>();
         if (view.scrollable) result.add(new Swipe(manager, view));
         if (view.checkable || view.clickable) result.add(new Click(manager, view));
