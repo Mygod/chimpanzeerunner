@@ -6,7 +6,7 @@ import org.w3c.dom.Element;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class View extends ArrayList<View> {
+public class View {
     public final Activity activity;
     public final View parent;
     public final String className, text, contentDesc, resourceId;
@@ -14,6 +14,7 @@ public class View extends ArrayList<View> {
     public final boolean checkable, checked, clickable, enabled, focusable, focused, scrollable, longClickable,
             password, selected;
     public final Bounds bounds;
+    public final ArrayList<View> children = new ArrayList<>();
 
     public View(Activity activity, View parent, Element element) throws MalformedSourceException {
         this.activity = activity;
@@ -36,7 +37,7 @@ public class View extends ArrayList<View> {
         password = Boolean.parseBoolean(element.getAttribute("password"));
         selected = Boolean.parseBoolean(element.getAttribute("selected"));
         bounds = new Bounds(element.getAttribute("bounds"));
-        for (Element child : DomUtils.getChildElements(element)) add(new View(activity, this, child));
+        for (Element child : DomUtils.getChildElements(element)) children.add(new View(activity, this, child));
     }
 
     @Override
@@ -75,7 +76,8 @@ public class View extends ArrayList<View> {
 
     private int findIndex(String className, View view) {
         int result = 1;
-        for (View child : this) if (view == child) return result; else if (className.equals(child.className)) ++result;
+        for (View child : children)
+            if (view == child) return result; else if (className.equals(child.className)) ++result;
         throw new IndexOutOfBoundsException();
     }
     public String getXPath() {
