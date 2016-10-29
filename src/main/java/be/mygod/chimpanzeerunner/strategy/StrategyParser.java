@@ -10,6 +10,7 @@ public class StrategyParser implements IStringConverter<Function<TestManager, Ab
     public Function<TestManager, AbstractStrategy> convert(String value) {
         switch (value.toLowerCase()) {
             case "frequency": return MinFrequencyRandomSelectionStrategy::new;
+            case "graph": return GraphTraversalStrategy::new;
             case "random": return RandomSelectionStrategy::new;
             case "random-bias": return RandomBiasSelectionStrategy::new;
             default: return InvalidStrategy::new;

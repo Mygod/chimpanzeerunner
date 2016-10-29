@@ -44,7 +44,6 @@ public class View {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
         View view = (View) o;
         return checkable == view.checkable &&
                 clickable == view.clickable &&
@@ -57,14 +56,13 @@ public class View {
                 Objects.equals(className, view.className) &&
                 Objects.equals(text, view.text) &&
                 Objects.equals(contentDesc, view.contentDesc) &&
-                Objects.equals(resourceId, view.resourceId) &&
-                Objects.equals(bounds, view.bounds);
+                Objects.equals(resourceId, view.resourceId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), activity, parent, className, text, contentDesc, resourceId, checkable,
-                clickable, focusable, scrollable, longClickable, password, bounds);
+        return Objects.hash(activity, parent, className, text, contentDesc, resourceId, checkable, clickable, focusable,
+                scrollable, longClickable, password);
     }
 
     @Override

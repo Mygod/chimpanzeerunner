@@ -7,6 +7,7 @@ import com.android.ddmlib.TimeoutException;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Objects;
 
 public class BroadcastIntent extends AndroidAction {
     public final String packageName, componentName, action, dataUri, mimeType;
@@ -67,6 +68,28 @@ public class BroadcastIntent extends AndroidAction {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        BroadcastIntent that = (BroadcastIntent) o;
+        return su == that.su &&
+                registeredOnly == that.registeredOnly &&
+                Objects.equals(packageName, that.packageName) &&
+                Objects.equals(componentName, that.componentName) &&
+                Objects.equals(action, that.action) &&
+                Objects.equals(dataUri, that.dataUri) &&
+                Objects.equals(mimeType, that.mimeType) &&
+                Objects.equals(categories, that.categories);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), packageName, componentName, action, dataUri, mimeType, categories, su,
+                registeredOnly);
     }
 
     @Override

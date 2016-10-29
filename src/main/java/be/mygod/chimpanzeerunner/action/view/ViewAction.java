@@ -12,6 +12,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.URI;
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 public abstract class ViewAction extends AbstractAction {
@@ -50,6 +51,19 @@ public abstract class ViewAction extends AbstractAction {
     protected final MobileElement getElement() {
         String xpath = view.getXPath();
         return manager.getDriver().findElement(By.xpath(String.format("%s|/hierarchy%s", xpath, xpath)));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!super.equals(o)) return false;
+        ViewAction that = (ViewAction) o;
+        return Objects.equals(view, that.view);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), view);
     }
 
     @Override

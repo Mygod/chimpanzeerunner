@@ -5,15 +5,12 @@ public abstract class AbstractAction {
 
     @Override
     public int hashCode() {
-        return toString().hashCode();
+        return getClass().hashCode();
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof AbstractAction)) return false;
-        AbstractAction that = (AbstractAction) o;
-        return toString().equals(that.toString());
+        return this == o || o != null && getClass() == o.getClass();
     }
 
     @Override
