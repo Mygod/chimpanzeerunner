@@ -1,5 +1,6 @@
 package be.mygod.chimpanzeerunner.android.os;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 
 public class PatternMatcher {
@@ -31,15 +32,16 @@ public class PatternMatcher {
     }
 
     @Override
-    public int hashCode() {
-        return path.hashCode() ^ type;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PatternMatcher that = (PatternMatcher) o;
+        return type == that.type &&
+                Objects.equals(path, that.path);
     }
+
     @Override
-    public boolean equals(Object other) {
-        if (other instanceof PatternMatcher) {
-            PatternMatcher matcher = (PatternMatcher) other;
-            return type == matcher.type && path.equals(matcher.path);
-        }
-        return false;
+    public int hashCode() {
+        return Objects.hash(path, type);
     }
 }
