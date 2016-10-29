@@ -28,7 +28,8 @@ public abstract class ViewAction extends AbstractAction {
         if (!view.enabled) return Stream.empty();
         LinkedList<ViewAction> result = new LinkedList<>();
         if (view.scrollable) result.add(new Swipe(manager, view));
-        if (view.checkable || view.clickable) result.add(new Click(manager, view));
+        if (view.isEditable()) result.add(new InputText(manager, view));
+        else if (view.checkable || view.clickable) result.add(new Click(manager, view));
         if (view.longClickable) result.add(new LongClick(manager, view));
         return Stream.concat(result.stream(), view.children.stream().flatMap(child -> getActions(manager, child)));
     }

@@ -84,4 +84,28 @@ public class View {
         return parent == null ? String.format("/%s[1]", className)
                 : String.format("%s/%s[%d]", parent.getXPath(), className, parent.findIndex(className, this));
     }
+
+    /**
+     * Check whether the view is an EditText by comparing className with its all known children.
+     *
+     * Source: https://developer.android.com/reference/android/widget/EditText.html
+     *
+     * @return Is the view an EditText.
+     */
+    public boolean isEditable() {
+        switch (className) {
+            case "android.widget.EditText":
+                case "android.support.v7.widget.AppCompatEditText":
+                    case "android.support.design.widget.TextInputEditText":
+                case "android.widget.AutoCompleteTextView":
+                    case "android.support.v7.widget.AppCompatAutoCompleteTextView":
+                    case "android.widget.MultiAutoCompleteTextView":
+                        case "android.support.v7.widget.AppCompatMultiAutoCompleteTextView":
+                case "android.inputmethodservice.ExtractEditText":
+                case "android.support.v17.leanback.widget.GuidedActionEditText":
+                case "android.support.v17.leanback.widget.SearchEditText":
+                return true;
+            default: return false;
+        }
+    }
 }
