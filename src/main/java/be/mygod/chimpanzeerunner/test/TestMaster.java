@@ -57,7 +57,6 @@ public final class TestMaster implements Runnable {
         DesiredCapabilities capabilities = new DesiredCapabilities();   // default capabilities
         capabilities.setCapability(MobileCapabilityType.NO_RESET, true);
         capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 120);
-        capabilities.setCapability(AndroidMobileCapabilityType.UNICODE_KEYBOARD, true);   // hmm why not?
         capabilities.setCapability(AndroidMobileCapabilityType.RESET_KEYBOARD, true);
         File logFile = App.instance.createLogFile("appium");
         System.out.printf("Creating new appium service with log file: %s\n", logFile);
