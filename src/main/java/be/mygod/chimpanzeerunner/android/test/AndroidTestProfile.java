@@ -1,6 +1,7 @@
 package be.mygod.chimpanzeerunner.android.test;
 
 import be.mygod.chimpanzeerunner.android.device.AndroidDevice;
+import be.mygod.chimpanzeerunner.android.os.Activity;
 import be.mygod.chimpanzeerunner.android.os.BroadcastReceiver;
 import be.mygod.chimpanzeerunner.device.Device;
 import be.mygod.chimpanzeerunner.device.DeviceManager;
@@ -19,6 +20,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class AndroidTestProfile extends TestProfile {
     public AndroidTestProfile(File file) throws IOException, ParserConfigurationException, SAXException {
@@ -30,14 +32,24 @@ public class AndroidTestProfile extends TestProfile {
             minSdkVersion = Integer.parseInt(meta.getMinSdkVersion());
             Document manifest = Xml.parse(parser.getManifestXml());
             Element application = DomUtils.getChildElementByTagName(manifest.getDocumentElement(), "application");
-            receivers = DomUtils.getChildElements(application).stream()
-                    .filter(element -> "receiver".equals(element.getNodeName()))
-                    .map(BroadcastReceiver::new).toArray(BroadcastReceiver[]::new);
+            for (Element element : DomUtils.getChildElements(application)) switch (element.getNodeName()) {
+                case "activity":
+                case "activity-alias":  // ignore the differences for now
+                    if (mainActivity == null) {
+                        Activity activity = new Activity(element);
+                        if (activity.isMainActivity()) mainActivity = activity;
+                    }
+                    break;
+                case "receiver":
+                    receivers.add(new BroadcastReceiver(element));
+                    break;
+            }
         }
     }
 
     public final String packageName;
-    public final BroadcastReceiver[] receivers;
+    public Activity mainActivity;
+    public final ArrayList<BroadcastReceiver> receivers = new ArrayList<>();
 
     private final String name;
     private final int minSdkVersion;

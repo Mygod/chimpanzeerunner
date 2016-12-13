@@ -56,10 +56,10 @@ public class BroadcastFilter {
     public BroadcastFilter(Element element) {
         for (Element child : DomUtils.getChildElements(element)) switch (child.getNodeName()) {
             case "action":
-                actions.add(child.getAttribute("android:componentName"));
+                actions.add(child.getAttribute("android:name"));
                 break;
             case "category":
-                categories.add(child.getAttribute("android:componentName"));
+                categories.add(child.getAttribute("android:name"));
                 break;
             case "data":
                 String val = child.getAttribute("android:scheme");

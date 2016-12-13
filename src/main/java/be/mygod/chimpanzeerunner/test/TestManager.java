@@ -64,6 +64,7 @@ public abstract class TestManager implements Runnable {
                                                                 DesiredCapabilities capabilities);
     public abstract String getPackageName();
     public abstract URI getLocation();
+    public abstract void startMainActivity();
     public abstract void navigateBack();
     protected abstract void cleanUp();
 
@@ -91,12 +92,17 @@ public abstract class TestManager implements Runnable {
                 for (;;) try {
                     URI location;
                     for (int i = 0; ; ++i) {
-                        if (i >= 10) throw new TestAbortException("Unexpected location.");
                         location = getLocation();
                         if (getPackageName().equals(location.getHost()) || URI_WHITE_LIST.contains(location)) break;
                         else {
-                            System.out.printf("Unexpected location: %s. Pressing back in hope of returning to original package...\n", location);
-                            navigateBack();
+                            System.out.printf("Unexpected location: %s. ", location);
+                            if (i >= 10) {
+                                System.out.println("Force relaunching main activity...");
+                                startMainActivity();
+                            } else {
+                                System.out.println("Pressing back in hope of returning to original package...");
+                                navigateBack();
+                            }
                             try {
                                 Thread.sleep(1000);
                             } catch (InterruptedException e) {

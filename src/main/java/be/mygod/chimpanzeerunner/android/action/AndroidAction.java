@@ -61,7 +61,7 @@ public abstract class AndroidAction extends AbstractAction {
             e.printStackTrace();
         }
         return Stream.concat(
-                Arrays.stream(profile.receivers).flatMap(receiver -> receiver.getActions(device, profile.packageName)),
+                profile.receivers.stream().flatMap(receiver -> receiver.getActions(device, profile.packageName)),
                 registeredFilters.stream().flatMap(filter -> filter.getActions(device, profile.packageName, null))
         );
     }

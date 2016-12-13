@@ -4,6 +4,7 @@ import be.mygod.chimpanzeerunner.action.AbstractAction;
 import be.mygod.chimpanzeerunner.android.action.AndroidAction;
 import be.mygod.chimpanzeerunner.android.action.PressMediaButton;
 import be.mygod.chimpanzeerunner.android.device.AndroidDevice;
+import be.mygod.chimpanzeerunner.android.os.Activity;
 import be.mygod.chimpanzeerunner.device.Device;
 import be.mygod.chimpanzeerunner.device.DeviceManager;
 import be.mygod.chimpanzeerunner.strategy.AbstractStrategy;
@@ -58,6 +59,14 @@ public class AndroidTestManager extends TestManager {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public void startMainActivity() {
+        AndroidTestProfile atp = (AndroidTestProfile) profile;
+        driver.startActivity(atp.packageName, atp.mainActivity.name,
+                atp.packageName, atp.mainActivity.name,
+                Activity.ACTION_MAIN, Activity.CATEGORY_LAUNCHER, null, null);
     }
 
     @Override
