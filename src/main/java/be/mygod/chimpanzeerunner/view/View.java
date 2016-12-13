@@ -79,7 +79,7 @@ public class View {
         throw new IndexOutOfBoundsException();
     }
     public String getXPath() {
-        return parent == null ? String.format("/%s[1]", className)
+        return parent == null ? String.format("/hierarchy/%s[1]", className)
                 : String.format("%s/%s[%d]", parent.getXPath(), className, parent.findIndex(className, this));
     }
 

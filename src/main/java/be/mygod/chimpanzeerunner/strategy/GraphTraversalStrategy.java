@@ -1,6 +1,5 @@
 package be.mygod.chimpanzeerunner.strategy;
 
-import be.mygod.chimpanzeerunner.App;
 import be.mygod.chimpanzeerunner.action.AbstractAction;
 import be.mygod.chimpanzeerunner.action.NavigateBack;
 import be.mygod.chimpanzeerunner.test.TestManager;
