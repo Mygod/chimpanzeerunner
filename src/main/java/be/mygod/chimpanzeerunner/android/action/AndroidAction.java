@@ -22,6 +22,11 @@ public abstract class AndroidAction extends AbstractAction {
         this.targetDevice = (AndroidDevice) device;
     }
 
+    @Override
+    public int getBias() {
+        return 2;
+    }
+
     private static final Pattern
             PATTERN_APP = Pattern.compile("^    app=(\\d+):(.*?)(:.*)?/(\\d+|u\\d+[asi]\\d+) pid=\\1 uid=(\\d+) user=(\\d+)$"),
             PATTERN_AUDIO_FOCUS = Pattern.compile(" -- pack: (.*) -- ");

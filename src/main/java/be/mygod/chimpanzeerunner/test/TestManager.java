@@ -33,7 +33,8 @@ public abstract class TestManager implements Runnable {
                     new URI("android://com.android.documentsui/.DocumentsActivity"),
                     new URI("android://com.android.chrome/org.chromium.chrome.browser.customtabs.CustomTabActivity"),
                     new URI("android://com.android.packageinstaller/.permission.ui.GrantPermissionsActivity"),
-                    new URI("android://com.android.settings/.Settings$AppWriteSettingsActivity")
+                    new URI("android://com.android.settings/.Settings$AppWriteSettingsActivity"),
+                    new URI("android://org.chromium.webview_shell/.WebViewBrowserActivity")
             ));
         } catch (URISyntaxException e) {
             e.printStackTrace();
