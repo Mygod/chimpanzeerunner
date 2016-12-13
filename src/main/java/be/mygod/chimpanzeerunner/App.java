@@ -18,7 +18,7 @@ public final class App {
     @Parameter(names = {"-s", "--strategy"}, description = "Strategy to use.                                                      " +
             "Available options: frequency, graph, random, random-bias              " +
             "Default: frequency", converter = StrategyParser.class)
-    public Function<TestManager, AbstractStrategy> strategy = GraphTraversalStrategy::new;
+    public Function<TestManager, AbstractStrategy> strategy = MinFrequencyRandomSelectionStrategy::new;
 
     @Parameter(names = {"-c", "--count"}, description = "Specify total count of actions to taken.                                 " +
             "Only apply to the following strategies: random")
