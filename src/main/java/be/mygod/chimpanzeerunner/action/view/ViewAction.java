@@ -49,8 +49,7 @@ public abstract class ViewAction extends AbstractAction {
      * @return The element that needs action.
      */
     protected final MobileElement getElement() {
-        String xpath = view.getXPath();
-        return manager.getDriver().findElement(By.xpath(String.format("%s|/hierarchy%s", xpath, xpath)));
+        return manager.getDriver().findElement(By.xpath(view.getXPath()));
     }
 
     @Override

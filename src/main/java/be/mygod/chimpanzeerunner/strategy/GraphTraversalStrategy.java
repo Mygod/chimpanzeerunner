@@ -7,6 +7,7 @@ import be.mygod.chimpanzeerunner.test.TestManager;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -39,15 +40,15 @@ public class GraphTraversalStrategy extends AbstractStrategy {
             System.out.printf("Performing action: %s\n", action);
             action.perform();
             return true;
-        } else {
-            if (location == root) return false;
-            if (++backCount >= 10) {
-                System.err.println("Unable to return to root. Terminating.");
-                return false;
-            }
-            manager.navigateBack();
-            return true;
         }
+        if (Objects.equals(location, root)) return false;
+        if (++backCount >= 10) {
+            System.err.println("Unable to return to root. Terminating.");
+            return false;
+        }
+        System.out.printf("No more actions. Pressing back.\n");
+        manager.navigateBack();
+        return true;
     }
 
     @Override

@@ -52,11 +52,11 @@ public class View {
                 longClickable == view.longClickable &&
                 password == view.password &&
                 Objects.equals(activity, view.activity) &&
-                Objects.equals(parent, view.parent) &&
                 Objects.equals(className, view.className) &&
                 Objects.equals(text, view.text) &&
                 Objects.equals(contentDesc, view.contentDesc) &&
-                Objects.equals(resourceId, view.resourceId);
+                Objects.equals(resourceId, view.resourceId) &&
+                Objects.equals(parent, view.parent);
     }
 
     @Override
