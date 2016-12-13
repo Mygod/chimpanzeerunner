@@ -1,5 +1,6 @@
 package be.mygod.chimpanzeerunner.view;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.xml.DomUtils;
 import org.w3c.dom.Element;
 
@@ -20,7 +21,7 @@ public class View {
         this.activity = activity;
         this.parent = parent;
         MalformedSourceException.checkNodeName(element, className = element.getAttribute("class"));
-        text = element.getAttribute("text");
+        String text = element.getAttribute("text");
         // ignore package for now
         contentDesc = element.getAttribute("content-desc");
         resourceId = element.getAttribute("resource-id");
@@ -38,6 +39,16 @@ public class View {
         selected = Boolean.parseBoolean(element.getAttribute("selected"));
         bounds = new Bounds(element.getAttribute("bounds"));
         for (Element child : DomUtils.getChildElements(element)) children.add(new View(activity, this, child));
+        if (scrollable || children.isEmpty()) this.text = text; else {
+            // TODO: What if text starts with ' '?
+            StringBuilder builder = new StringBuilder();
+            if (StringUtils.isNotBlank(text)) builder.append(text);
+            for (View child : children) if (StringUtils.isNotBlank(child.text)) {
+                builder.append(builder.length() > 0 ? "\n " : " ");
+                builder.append(child.text.replace("\n", "\n "));
+            }
+            this.text = builder.toString();
+        }
     }
 
     @Override
