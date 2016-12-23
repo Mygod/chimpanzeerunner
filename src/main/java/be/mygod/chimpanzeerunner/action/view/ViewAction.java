@@ -1,9 +1,11 @@
 package be.mygod.chimpanzeerunner.action.view;
 
+import be.mygod.chimpanzeerunner.App;
 import be.mygod.chimpanzeerunner.action.AbstractAction;
 import be.mygod.chimpanzeerunner.test.TestManager;
 import be.mygod.chimpanzeerunner.view.Activity;
 import be.mygod.chimpanzeerunner.view.View;
+import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import org.openqa.selenium.By;
 import org.xml.sax.SAXException;
@@ -17,12 +19,36 @@ import java.util.stream.Stream;
 
 public abstract class ViewAction extends AbstractAction {
     public static Stream<ViewAction> getActions(TestManager manager, URI location) {
+        AppiumDriver<MobileElement> driver = manager.getDriver();
+//        Stream<ViewAction> result = Stream.empty();
+        Boolean webViewEnabled = false;
+        if (driver.getContextHandles().contains(manager.getWebViewContext())) {
+            driver.context(manager.getWebViewContext());
+            for (String handle : driver.getWindowHandles()) {
+                driver.switchTo().window(handle);
+                String url = driver.getCurrentUrl();
+                if (App.instance.testUrl.matcher(url).matches()) {
+                    // TODO: handle cases for multiple webviews
+//                    System.out.printf(String.valueOf(driver.findElementsByXPath("//*[enabled='true' and (scrollable='true' or checkable='true')]").size()));
+                    //result = Stream.concat(result, getActions(manager, new WebView(url, driver.getPageSource())));
+                    webViewEnabled = true;
+                    break;
+                }
+            }
+            driver.context(TestManager.NATIVE_APP);
+        }
+        if (webViewEnabled) System.out.println("Testing webviews...");
         try {
-            return getActions(manager, new Activity(location, manager.getDriver().getPageSource()).root);
+            return getActions(manager, new Activity(location, driver.getPageSource(), webViewEnabled).root);
+//            for (WebElement element : driver.findElementsByTagName("android.webkit.WebView")) {
+//                // element.getWindowHandle()?
+//            }
+//            result = Stream.concat(result, getActions(manager, new Activity(location, driver.getPageSource()).root));
         } catch (IOException | SAXException | ParserConfigurationException e) {
             e.printStackTrace();
         }
         return Stream.empty();
+//        return result;
     }
 
     private static Stream<ViewAction> getActions(TestManager manager, View view) {

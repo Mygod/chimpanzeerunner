@@ -11,12 +11,12 @@ public class NavigationListener extends AppiumListener implements NavigationEven
 
     @Override
     public void beforeNavigateTo(String url, WebDriver driver) {
-
+        System.out.printf("Before navigate to: %s\n", url);
     }
 
     @Override
     public void afterNavigateTo(String url, WebDriver driver) {
-
+        System.out.printf("After navigate to: %s\n", url);
     }
 
     @Override

@@ -16,14 +16,16 @@ public final class Activity {
     public final int rotation;
     public final View root;
 
-    public Activity(URI uri, String source) throws IOException, SAXException, ParserConfigurationException {
+    public Activity(URI uri, String source, Boolean webViewEnabled)
+            throws IOException, SAXException, ParserConfigurationException {
         this.uri = uri;
         Element hierarchy = Xml.parse(source).getDocumentElement();
         MalformedSourceException.checkNodeName(hierarchy, "hierarchy");
         rotation = Integer.parseInt(hierarchy.getAttribute("rotation"));
         List<Element> children = DomUtils.getChildElements(hierarchy);
         if (children.size() != 1) throw new MalformedSourceException("There isn't only one hierarchy root found!");
-        root = new View(this, null, children.get(0));
+        View root = new View(this, null, children.get(0), webViewEnabled);
+        this.root = webViewEnabled || !root.isWebView() ? root : null;
     }
 
     @Override

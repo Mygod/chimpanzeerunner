@@ -8,6 +8,7 @@ import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
+import io.appium.java_client.service.local.flags.AndroidServerFlag;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
@@ -60,12 +61,14 @@ public final class TestMaster implements Runnable {
         capabilities.setCapability(AndroidMobileCapabilityType.RESET_KEYBOARD, true);
         File logFile = App.instance.createLogFile("appium");
         System.out.printf("Creating new appium service with log file: %s\n", logFile);
-        AppiumDriverLocalService service = new AppiumServiceBuilder()
+        AppiumServiceBuilder builder = new AppiumServiceBuilder()
                 .withIPAddress("127.0.0.1")
                 .usingAnyFreePort()
                 .withCapabilities(capabilities)
-                .withLogFile(logFile)
-                .build();
+                .withLogFile(logFile);
+        if (App.instance.chromedriverExecutable != null)
+            builder.withArgument(AndroidServerFlag.CHROME_DRIVER_EXECUTABLE, App.instance.chromedriverExecutable);
+        AppiumDriverLocalService service = builder.build();
         try {
             ((ArrayList<OutputStream>) streamsField.get(streamField.get(service))).clear(); // remove System.out logging
         } catch (IllegalAccessException e) {

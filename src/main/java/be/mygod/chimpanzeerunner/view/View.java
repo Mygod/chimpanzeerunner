@@ -7,7 +7,7 @@ import org.w3c.dom.Element;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class View {
+public final class View {
     public final Activity activity;
     public final View parent;
     public final String className, text, contentDesc, resourceId;
@@ -17,7 +17,8 @@ public class View {
     public final Bounds bounds;
     public final ArrayList<View> children = new ArrayList<>();
 
-    public View(Activity activity, View parent, Element element) throws MalformedSourceException {
+    public View(Activity activity, View parent, Element element, Boolean webViewEnabled)
+            throws MalformedSourceException {
         this.activity = activity;
         this.parent = parent;
         MalformedSourceException.checkNodeName(element, className = element.getAttribute("class"));
@@ -38,7 +39,10 @@ public class View {
         password = Boolean.parseBoolean(element.getAttribute("password"));
         selected = Boolean.parseBoolean(element.getAttribute("selected"));
         bounds = new Bounds(element.getAttribute("bounds"));
-        for (Element child : DomUtils.getChildElements(element)) children.add(new View(activity, this, child));
+        if (webViewEnabled || !isWebView()) for (Element child : DomUtils.getChildElements(element)) {
+            View view = new View(activity, this, child, webViewEnabled);
+            if (webViewEnabled || !view.isWebView()) children.add(view);
+        }
         if (scrollable || children.isEmpty()) this.text = text; else {  // scrollable view's children is subject to change
             // TODO: What if text starts with ' '?
             StringBuilder builder = new StringBuilder();
@@ -116,5 +120,16 @@ public class View {
                 return true;
             default: return false;
         }
+    }
+
+    /**
+     * Check whether the view is a WebView by comparing className.
+     *
+     * Source: https://developer.android.com/reference/android/webkit/WebView.html
+     *
+     * @return Is the view a WebView.
+     */
+    public final boolean isWebView() {
+        return Objects.equals(className, "android.webkit.WebView");
     }
 }

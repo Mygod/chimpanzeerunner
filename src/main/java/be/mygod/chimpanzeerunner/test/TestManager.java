@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 
 public abstract class TestManager implements Runnable {
     private static final HashSet<URI> URI_WHITE_LIST;
+    public static final String NATIVE_APP = "NATIVE_APP";
 
     static {
         HashSet<URI> list;
@@ -68,6 +69,10 @@ public abstract class TestManager implements Runnable {
     public abstract void startMainActivity();
     public abstract void navigateBack();
     protected abstract void cleanUp();
+
+    public String getWebViewContext() {
+        return "WEBVIEW_" + getPackageName();
+    }
 
     protected Stream<AbstractAction> getActions(URI location) {
         return Stream.concat(
@@ -119,7 +124,7 @@ public abstract class TestManager implements Runnable {
                     System.err.println("Element not found. Retrying later.");
                 } catch (StaleElementReferenceException e) {
                     if (e.getMessage().startsWith("android.support.test.uiautomator.StaleObjectException\n"))
-                        System.err.println("Element not found. It could be a [known issue](https://github.com/appium/appium-uiautomator2-server/issues/29). Retrying later.");
+                        System.err.println("Element not found. It could be a [known issue](https://github.com/appium/appium/issues/7516). Retrying later.");
                     else e.printStackTrace();
                 } catch (RuntimeException e) {
                     e.printStackTrace();
