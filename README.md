@@ -1,6 +1,6 @@
 # chimpanzeerunner
 
-chimpanzeerunner is a more intelligent runner than monkeyrunner.
+chimpanzeerunner is a more automated runner than monkeyrunner. (unmaintained)
 
 ## Set up
 
